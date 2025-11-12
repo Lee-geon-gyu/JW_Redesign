@@ -20,7 +20,7 @@ a {
 }
 /* Variable ------------------------------------------------------------ */
 :root {
-  --grid-system: 0 14rem;
+  --grid-system: 164rem;
   --primary-color: rgba(38, 127, 195, 1);
   --main-color-white: rgba(248, 249, 250, 1);
   --main-color-gray: rgba(68, 68, 68, 1);
@@ -38,6 +38,7 @@ html {
 }
 
 html body {
+  font-family: "Pretendard";
   overflow-x: hidden;
 }
 
@@ -54,27 +55,141 @@ img {
 /* Customize --------------------------------------------------------------- */
 /* header --------------------------------------------------------------- */
 header {
+  width: 100vw;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 7rem;
+  background-color: black;
 }
 
 header > .hd-container {
   width: 100%;
   height: 9rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 9.6rem;
   align-items: center;
   border: var(--box-border);
+}
+
+@media screen and (max-width: 1440px) {
+  header > .hd-container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  header > .hd-container > .menu-box {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  header > .hd-container > .side-box > .translate-box {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  header > .hd-container > .side-box > .tab-box {
+    display: block;
+  }
 }
 /* header > logo-box --------------------------------------------------------------- */
 header > .hd-container > .hd-logo-box {
   border: var(--box-border);
   height: 100%;
+  width: 19rem;
 }
 
 header > .hd-container > .hd-logo-box > a {
+  height: 100%;
+  width: 19rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+header > .hd-container > .hd-logo-box > a > img {
+  display: block;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+header > .hd-container > .hd-logo-box > a:hover > img {
+  transform: scale(0.9);
+  transition: all 0.3s ease-in-out;
+}
+/* header > menu-box --------------------------------------------------------------- */
+header > .hd-container > .menu-box {
+  height: 100%;
+  border: var(--box-border);
+}
+
+header > .hd-container > .menu-box > ul {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+header > .hd-container > .menu-box > ul > li {
+  height: 100%;
+  width: 100%;
+  padding: 0 1.8rem;
+  white-space: nowrap;
+}
+
+header > .hd-container > .menu-box > ul > li > a {
+  position: relative;
+  display: flex;
+  height: 100%;
+  padding: 0 1.2rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--main-color-white);
+}
+
+header > .hd-container > .menu-box > ul > li > a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.6rem;
+  background-color: var(--main-color-white);
+  top: 100%;
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s linear;
+}
+
+header > .hd-container > .menu-box > ul > li:hover > a::after {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s linear;
+}
+/* header > side-box --------------------------------------------------------------- */
+header > .hd-container > .side-box {
+  border: var(--box-border);
+  height: 100%;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+header > .hd-container > .side-box > .translate-icon-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+header > .hd-container > .side-box > .translate-icon-wrapper > a {
   display: flex;
   height: 100%;
   justify-content: center;
@@ -83,14 +198,59 @@ header > .hd-container > .hd-logo-box > a {
   overflow: hidden;
 }
 
-header > .hd-container > .hd-logo-box > a > img {
-  width: 100%;
+header > .hd-container > .side-box > .translate-icon-wrapper > a.rotate > img {
+  transform: rotate(180deg);
+  transition: all 0.3s ease-in-out;
+}
+
+header > .hd-container > .side-box > .translate-icon-wrapper > a > img {
+  width: 2rem;
+  height: 2rem;
+  transition: all 0.3s ease-in-out;
   object-fit: var(--object-cover);
 }
-/* header > menu-box --------------------------------------------------------------- */
-header > .hd-container > .menu-box {
-  width: 83.5em;
-  height: 100%;
 
-  border: var(--box-border);
+header > .hd-container > .side-box > .translate-box {
+  padding: 0.4rem 0.2rem;
+}
+
+header > .hd-container > .side-box > .translate-box > a {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  align-items: center;
+  color: var(--main-color-white);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+header > .hd-container > .side-box > .translate-box > a > span {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+header > .hd-container > .side-box > .translate-box > a > img {
+  width: 1.4rem;
+  object-fit: cover;
+}
+
+header > .hd-container > .side-box > .tab-box {
+  height: 100%;
+  display: none;
+}
+
+header > .hd-container > .side-box > .tab-box > a {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+header > .hd-container > .side-box > .tab-box > a > img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  filter: brightness(10);
 }
