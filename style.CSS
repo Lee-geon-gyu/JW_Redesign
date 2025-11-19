@@ -313,15 +313,26 @@ header > .hd-container > .side-box > .language-box > .translate-box > a {
   justify-content: center;
   gap: 2.4rem;
   align-items: center;
+  transform: translateY(50%);
   color: var(--main-color-white);
   box-sizing: border-box;
   overflow: hidden;
-  padding: 0.4rem 0.4rem;
-}
-
-header > .hd-container > .side-box > .language-box > .translate-box > a > span {
   font-size: 1.6rem;
   font-weight: 600;
+}
+
+header > .hd-container > .side-box > .language-box > .translate-box > a > .languages-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+header > .hd-container > .side-box > .language-box > .translate-box > a > .languages-wrapper > span {
+  width: 100%;
+  height: 100%;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 0.6rem 2.4rem;
 }
 
 header > .hd-container > .side-box > .language-box > .translate-box-1 > a > img {
@@ -337,6 +348,7 @@ header > .hd-container > .side-box > .language-box > .translate-box-1 > a > img.
 }
 
 header > .hd-container > .side-box > .language-box > .translate-box-2 {
+  margin-top: -1.2rem;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease-in-out;
@@ -356,7 +368,7 @@ header > .hd-container > .side-box > .language-box > .translate-box-2 > a {
 }
 
 
-header > .hd-container > .side-box > .language-box > .translate-box-2 > a:hover {
+header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span.hover {
   color: var(--main-color-white);
   background-color: var(--secondary-color);
 }
@@ -480,16 +492,17 @@ main > .sec-1 > .text-container > .custom-pagination {
 main > .sec-1 > .text-container > .custom-pagination > .progress-bar {
   width: 22.4rem;
   height: 1rem;
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.2);
   border-radius: 1.4rem;
   overflow: hidden;
 }
 
-main > .sec-1 > .text-container > .custom-pagination > .progress {
+main > .sec-1 > .text-container > .custom-pagination > .progress-bar > .progress {
   height: 100%;
   width: 0%;
-  background-color: #fff;
-  transition: width 0.35s;
+  border-radius: 1.4rem;
+  background-color: rgba(230, 230, 230, 0.8);
+  transition: width 0.35s ease-in-out;
 }
 
 main > .sec-1 > .text-container > .custom-pagination > .prev-btn, .next-btn {
@@ -555,6 +568,7 @@ footer > .btn-wrap > .btn {
 footer > .btn-wrap > .btn > .title {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 1.2rem 2.4rem;
 }
 
@@ -562,9 +576,20 @@ footer > .btn-wrap > .btn > .title > a {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s ease-in-out;
 }
 
-footer > .btn-wrap > .btn:hover > ul {
+footer > .btn-wrap > .btn > .title > a > img {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+footer > .btn-wrap > .btn > .title > a.rotateReverse {
+  transform: rotate(180deg);
+  transition: all 0.3s ease-in-out;
+}
+
+footer > .btn-wrap > .btn > ul.bottomDropUp {
   height: calc(calc(5.5rem * 14) + 1.2rem);
   transition: all 0.5s ease-in-out;
 }

@@ -30,10 +30,19 @@ function translateboxDropdown__init() {
     $(this).find("> a > img").toggleClass("rotate");
   });
 
+  $("header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span").mouseenter(function() {
+    $(this).addClass("hover");
+  });
+
+  $("header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span").mouseleave(function() {
+    $(this).removeClass("hover");
+  });
+
   $("header > .hd-container > .side-box > .language-box > .translate-box-2").click(function() {
     $(this).removeClass("drop")
     $(this).parent().find("> .translate-box-1 > a > img").toggleClass("rotate");
   });
+
   $(document).click(function(e) {
   const $dropdown = $("header > .hd-container > .side-box > .language-box > .translate-box-2");
   const $button = $("header > .hd-container > .side-box > .language-box > .translate-box-1");
@@ -117,11 +126,18 @@ function headerChangeOnSection__init() {
   });
   observer.observe(section5);
 };
+// headerChangeOnSection ------------------------------ //
+function bottomSelectboxDropUp__init() {
+  $("footer > .btn-wrap > .btn").click(function() {
+    $(this).find("> ul").toggleClass("bottomDropUp");
+    $(this).find("> .title > a").toggleClass("rotateReverse");
+  });
+};
 
-
-
+// Functions Operate Key ------------------------------ //
 menuboxDropdown__init();
 menuitemDropdown__init();
 translateboxDropdown__init();
 swiperCustom__init();
 headerChangeOnSection__init();
+bottomSelectboxDropUp__init();
