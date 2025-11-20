@@ -1,4 +1,8 @@
 console.clear();
+
+AOS.init();
+gsap.registerPlugin(ScrollTrigger);
+
 // menuboxDropdown ------------------------------ //
 function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseenter(function () {
@@ -110,7 +114,7 @@ function swiperCustom__init() {
 // headerChangeOnSection ------------------------------ //
 function headerChangeOnSection__init() {
   const header = document.querySelector("header");
-  const section5 = document.querySelector(".sec-5");
+  const targets = document.querySelectorAll(`.sec-5, .sec-2`);
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -126,7 +130,10 @@ function headerChangeOnSection__init() {
       threshold: 0.3,
     }
   );
-  observer.observe(section5);
+
+  targets.forEach((el) => {
+    // observer.observe(el);
+  });
 }
 // headerChangeOnSection ------------------------------ //
 function bottomSelectboxDropUp__init() {
@@ -158,7 +165,8 @@ function scrollTrigger__init() {
     .fromTo(".t3", { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 3 }, "<")
 
     .to(".t3", { opacity: 0, y: 0, duration: 0 })
-    .fromTo(".t4", { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 3 }, "<");
+    .fromTo(".t4", { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 3 }, "<")
+    .to(".sec-2 > .bg-container", { opacity: 0, duration: 3 }, "<");
 }
 // Functions Operate Key ------------------------------ //
 menuboxDropdown__init();
@@ -168,5 +176,3 @@ swiperCustom__init();
 headerChangeOnSection__init();
 bottomSelectboxDropUp__init();
 scrollTrigger__init();
-gsap.registerPlugin(ScrollTrigger);
-AOS.init();

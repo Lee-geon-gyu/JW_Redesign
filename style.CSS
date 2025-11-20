@@ -528,13 +528,14 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   width: 2rem;
 }
 /* main > sec-2 --------------------------------------------------------------- */
-main > .sec-2 {
+.sec-2 {
   width: 100%;
   min-width: 192rem;
   height: 100%;
   position: relative;
   cursor: default;
   z-index: 6;
+  background-color: var(--main-color-white) !important;
 }
 
 .sec-2-text-box {
@@ -571,7 +572,6 @@ main > .sec-2 {
   justify-content: center;
   padding: 3.8rem 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.7);
   overflow: hidden;
   box-sizing: border-box;
 }
