@@ -1,7 +1,7 @@
 console.clear();
 
 AOS.init();
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 // menuboxDropdown ------------------------------ //
 function menuboxDropdown__init() {
@@ -142,7 +142,7 @@ function bottomSelectboxDropUp__init() {
     $(this).find("> .title > a").toggleClass("rotateReverse");
   });
 }
-// GSAP Trigger ------------------------------ //
+// GSAP scrollTrigger ------------------------------ //
 function scrollTrigger__init() {
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -170,6 +170,49 @@ function scrollTrigger__init() {
     .to(".t4", { opacity: 0, y: 0, duration: 0 })
     .fromTo(".t5", { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 3 }, "<")
     .to(".sec-2 > .bg-container", { opacity: 0, duration: 3 }, "<");
+}
+// GSAP scrollLeins ------------------------------ //
+function scrollLeins__init() {
+const lenis = new Lenis({
+  duration: 3,
+  easing: t => t,
+  smooth: true,
+  smoothTouch: false
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+gsap.registerPlugin(ScrollTrigger);
+
+lenis.on('scroll', ScrollTrigger.update);
+
+gsap.utils.toArray("[data-speed]").forEach(el => {
+  gsap.to(el, {
+    y: () => -(el.dataset.speed * window.innerHeight / 5),
+    ease: "none",
+    scrollTrigger: {
+      trigger: el,
+      start: "top bottom",
+      scrub: true
+    }
+  });
+});
+
+gsap.utils.toArray(".section").forEach(sec => {
+  if (sec.classList.contains("sec-2")) return;
+
+  ScrollTrigger.create({
+    trigger: sec,
+    start: "top top",
+    end: "bottom top",
+    pin: true,
+    pinSpacing: true,
+  });
+});
 }
 // headerHide ------------------------------ //
 function headerHide__init() {
@@ -219,4 +262,5 @@ swiperCustom__init();
 headerChangeOnSection__init();
 bottomSelectboxDropUp__init();
 scrollTrigger__init();
+scrollLeins__init();
 headerHide__init();
