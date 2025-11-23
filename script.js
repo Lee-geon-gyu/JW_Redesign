@@ -275,6 +275,42 @@ window.addEventListener("load", () => {
   });
 });
 }
+// slickSlider ------------------------------ //
+function slickSlider__init() {
+  $(document).ready(function() {
+  $('.goods-slider').slick({
+  centerMode: true,
+  centerPadding: '6rem',
+  slidesToShow: 2,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  speed: 600,
+  arrows: true,
+  responsive: [
+    {
+      breakpoint: 768,
+      settings: {
+        arrows: false,
+        centerMode: true,
+        centerPadding: '4rem',
+        slidesToShow: 3,
+        autoplay: true
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        arrows: false,
+        centerMode: true,
+        centerPadding: '4rem',
+        slidesToShow: 1,
+        autoplay: true
+      }
+    }
+  ]
+});
+});
+}
 // Functions Operate Key ------------------------------ //
 menuboxDropdown__init();
 menuitemDropdown__init();
@@ -286,3 +322,4 @@ scrollTrigger__init();
 scrollLeins__init();
 headerHide__init();
 marqueeSlide__init();
+slickSlider__init();
