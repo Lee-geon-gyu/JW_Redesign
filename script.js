@@ -114,25 +114,19 @@ function swiperCustom__init() {
 // headerChangeOnSection ------------------------------ //
 function headerChangeOnSection__init() {
   const header = document.querySelector("header");
-  const target = document.querySelectorAll(`.sec-2, .sec-6, .sec-7, .sec-8`);
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          header.classList.add("on-sec-w");
-        } else {
-          header.classList.remove("on-sec-w");
-        }
-      });
-    },
-    {
-      threshold: 0.3,
-    }
-  );
+  const target = document.querySelectorAll(`.sec-2, .sec-6, .sec-7, .sec-8, .banner`);
+  console.log(target);
 
   target.forEach((el) => {
-    observer.observe(el);
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top top",
+      end: "bottom top",
+      onEnter: () => header.classList.add("on-sec-w"),
+      onLeave: () => header.classList.remove("on-sec-w"),
+      onEnterBack: () => header.classList.add("on-sec-w"),
+      onLeaveBack: () => header.classList.remove("on-sec-w"),
+    });
   });
 }
 // bottomSelectboxDropUp ------------------------------ //
@@ -146,7 +140,7 @@ function bottomSelectboxDropUp__init() {
 function scrollTrigger__init() {
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".sec-2",
+      trigger: ".sec-2 > .content-wrap",
       start: "top top",
       end: "+=1250%",
       pin: true,
@@ -169,15 +163,17 @@ function scrollTrigger__init() {
 
     .to(".t4", { opacity: 0, y: 0, duration: 0 })
     .fromTo(".t5", { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 3 }, "<")
-    .to(".sec-2 > .bg-container", { opacity: 0, duration: 3 }, "<");
+    .to(".sec-2 .bg-container", { opacity: 0, duration: 3 }, "<");
+
+  headerChangeOnSection__init();
 }
 // GSAP scrollLeins ------------------------------ //
 function scrollLeins__init() {
   const lenis = new Lenis({
     lerp: 0.055,
-    easing: t => t,
+    easing: (t) => t,
     smooth: true,
-    smoothTouch: false
+    smoothTouch: false,
   });
 
   function raf(time) {
@@ -188,17 +184,17 @@ function scrollLeins__init() {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  lenis.on('scroll', ScrollTrigger.update);
+  lenis.on("scroll", ScrollTrigger.update);
 
-  gsap.utils.toArray("[data-speed]").forEach(el => {
+  gsap.utils.toArray("[data-speed]").forEach((el) => {
     gsap.to(el, {
-      y: () => -(el.dataset.speed * window.innerHeight / 5),
+      y: () => -((el.dataset.speed * window.innerHeight) / 5),
       ease: "none",
       scrollTrigger: {
         trigger: el,
         start: "top bottom",
-        scrub: true
-      }
+        scrub: true,
+      },
     });
   });
 }
@@ -244,82 +240,115 @@ function headerHide__init() {
 }
 // marqueeSlide ------------------------------ //
 function marqueeSlide__init() {
-window.addEventListener("load", () => {
-  const box = document.querySelector(".marquee-box");
-  const clone = box.cloneNode(true);
-  box.parentNode.appendChild(clone);
+  window.addEventListener("load", () => {
+    const box = document.querySelector(".marquee-box");
+    const clone = box.cloneNode(true);
+    box.parentNode.appendChild(clone);
 
-  const tl = gsap.timeline({
-    repeat: -1,
-    ease: "none"
-  });
-
-  const totalWidth = box.scrollWidth;
-
-  tl.fromTo(
-    ".marquee-box",
-    { x: 0 },
-    {
-      x: -totalWidth,
-      duration: 30,
+    const tl = gsap.timeline({
+      repeat: -1,
       ease: "none",
-    }
-  );
+    });
 
-  document.querySelector(".marquee-wrapper").addEventListener("mouseenter", () => {
-    tl.pause();
-  });
+    const totalWidth = box.scrollWidth;
 
-  document.querySelector(".marquee-wrapper").addEventListener("mouseleave", () => {
-    tl.play();
+    tl.fromTo(
+      ".marquee-box",
+      { x: 0 },
+      {
+        x: -totalWidth,
+        duration: 30,
+        ease: "none",
+      }
+    );
+
+    document.querySelector(".marquee-wrapper").addEventListener("mouseenter", () => {
+      tl.pause();
+    });
+
+    document.querySelector(".marquee-wrapper").addEventListener("mouseleave", () => {
+      tl.play();
+    });
   });
-});
 }
 // slickSlider ------------------------------ //
 function slickSlider__init() {
-  $(document).ready(function() {
-  $('.goods-slider').slick({
-  centerMode: true,
-  centerPadding: '6rem',
-  slidesToShow: 2,
-  autoplay: true,
-  autoplaySpeed: 2000,
-  speed: 600,
-  arrows: true,
-  responsive: [
-    {
-      breakpoint: 768,
-      settings: {
-        arrows: false,
-        centerMode: true,
-        centerPadding: '4rem',
-        slidesToShow: 3,
-        autoplay: true
+  $(document).ready(function () {
+    $(".goods-slider").slick({
+      centerMode: true,
+      centerPadding: "6rem",
+      slidesToShow: 2,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      speed: 600,
+      arrows: true,
+      responsive: [
+        {
+          breakpoint: 768,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: "4rem",
+            slidesToShow: 3,
+            autoplay: true,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: "4rem",
+            slidesToShow: 1,
+            autoplay: true,
+          },
+        },
+      ],
+    });
+  });
+}
+// searchBoxOptions ------------------------------ //
+function searchBoxOptions__init() {
+  (function () {
+    const input = document.getElementById("search");
+    const defaultText = "검색어를 입력해주세요.";
+
+    if (!input.placeholder) input.value = defaultText;
+
+    input.addEventListener("focus", () => {
+      if (input.value === defaultText) input.value = "";
+    });
+
+    input.addEventListener("blur", () => {
+      if (input.value.trim() === "" && !input.placeholder) input.value = defaultText;
+    });
+
+    document.getElementById("btnSearch").addEventListener("click", () => {
+      const q = input.value.trim();
+      if (!q) {
+        alert("검색어를 입력해주세요.");
+        input.focus();
+        return;
       }
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        arrows: false,
-        centerMode: true,
-        centerPadding: '4rem',
-        slidesToShow: 1,
-        autoplay: true
-      }
-    }
-  ]
-});
-});
+
+      console.log("검색 실행:", q);
+      alert(`검색어: ${q}`);
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("btnSearch").click();
+    });
+  })();
 }
 // Functions Operate Key ------------------------------ //
 menuboxDropdown__init();
 menuitemDropdown__init();
 translateboxDropdown__init();
 swiperCustom__init();
-headerChangeOnSection__init();
 bottomSelectboxDropUp__init();
 scrollTrigger__init();
 scrollLeins__init();
 headerHide__init();
 marqueeSlide__init();
 slickSlider__init();
+searchBoxOptions__init();

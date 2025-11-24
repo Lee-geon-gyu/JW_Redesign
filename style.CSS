@@ -102,6 +102,7 @@ img {
 /* header --------------------------------------------------------------- */
 header {
   width: 100dvw;
+  min-width: 192rem;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -456,6 +457,7 @@ main > .sec-1 {
   width: 100dvw;
   min-width: 192rem;
   height: 108dvh;
+  min-height: 108rem;
   position: relative;
 }
 
@@ -498,7 +500,7 @@ main > .sec-1 > .text-container {
 
 main > .sec-1 > .text-container > h1 {
   color: var(--main-color-white);
-  font-size: 6.4rem;
+  font-size: clamp(3.2rem, 4.5vw, 6.4rem);
   font-weight: 600;
   cursor: default;
   text-shadow: 0.4rem 0.4rem rgba(68, 68, 68, 0.2);
@@ -518,7 +520,7 @@ main > .sec-1 > .text-container > .text-en > img {
 
 main > .sec-1 > .text-container > .text-en > span {
   color: var(--main-color-white);
-  font-size: 3.2rem;
+  font-size: clamp(2.4rem, 4.5vw, 3.2rem);
   font-weight: 600;
   cursor: default;
 }
@@ -528,7 +530,7 @@ main > .sec-1 > .text-container > .custom-pagination {
   align-items: center;
   gap: 1.2rem;
   color: var(--main-color-white);
-  font-size: 2.2rem;
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
   font-weight: 500;
 }
 
@@ -574,7 +576,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 .sec-2 {
   width: 100vw;
   min-width: 192rem;
-  height: 100vh;
+  min-height: 108rem;
   position: relative;
   cursor: default;
   z-index: 6;
@@ -602,7 +604,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
-  font-size: 6.4rem;
+  font-size: clamp(4.8rem, 4.5vw, 6.4rem);
   color: var(--main-color-white);
   font-weight: 700;
   text-align: center;
@@ -623,14 +625,14 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   object-fit: var(--object-cover);
 }
 
-.sec-2 > .bg-container {
+.sec-2 .bg-container {
   width: 100%;
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.sec-2 > .bg-container > img {
+.sec-2 .bg-container > img {
   width: 100%;
   height: 100%;
   object-fit: var(--object-cover);
@@ -640,6 +642,7 @@ main > .sec-3 {
   width: 100dvw;
   min-width: 192rem;
   height: 108dvh;
+  min-height: 108rem;
   padding: 6rem 0;
   cursor: default;
   display: flex;
@@ -659,17 +662,17 @@ main > .sec-3 > .left-box {
 }
 
 main > .sec-3 > .left-box > span:nth-child(1) {
-  font-size: 2.8rem;
+  font-size: clamp(2.2rem, 1.5vw, 2.8rem);
   font-weight: 600;
 }
 
 main > .sec-3 > .left-box > h2 {
-  font-size: 7.2rem;
+  font-size: clamp(5.4rem, 4.5vw, 7.2rem);
   font-weight: 600;
 }
 
 main > .sec-3 > .left-box > span:nth-child(3) {
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 1vw, 1.6rem);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -679,7 +682,7 @@ main > .sec-3 > .left-box > span:nth-child(4) {
   margin-top: 4.8rem;
   width: 19rem;
   height: 5rem;
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 1vw, 2rem);
   font-weight: 800;
   color: var(--main-color-gray);
   background-color: var(--main-color-white);
@@ -759,23 +762,24 @@ main > .sec-3 > .right-box > .produce-box:hover > div {
 
 .sec-3 > .right-box > .produce-box > .titles {
   font-weight: 600;
-  font-size: 2.4rem;
+  font-size: clamp(2rem, 1.5vw, 2.4rem);
 }
 
 .sec-3 > .right-box > .produce-box > .number {
   font-weight: 600;
-  font-size: 4.8rem;
+  font-size: clamp(3.6rem, 4.5vw, 4.8rem);
 }
 
 .sec-3 > .right-box > .produce-box > .unit {
   font-weight: 500;
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.8rem);
 }
 /* main > sec-4 --------------------------------------------------------------- */
 main > .sec-4 {
   width: 100dvw;
   min-width: 192rem;
   height: 108dvh;
+  min-height: 108rem;
   padding: 8rem 0;
   position: relative;
   display: flex;
@@ -827,17 +831,17 @@ main > .sec-4 > .top-box {
 }
 
 main > .sec-4 > .top-box > span:nth-child(1) {
-  font-size: 2.4rem;
+  font-size: clamp(2rem, 4.5vw, 2.4rem);
   font-weight: 600;
 }
 
 main > .sec-4 > .top-box > h4 {
-  font-size: 6.4rem;
+  font-size: clamp(4.8rem, 4.5vw, 6.4rem);
   font-weight: 600;
 }
 
 main > .sec-4 > .top-box > span:nth-child(3) {
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 4.5vw, 1.6rem);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -923,21 +927,23 @@ main > .sec-4 > .bottom-box > .circles > span {
 }
 
 main > .sec-4 > .bottom-box > .circles > span:first-child {
-  font-size: 2.8rem;
+  font-size: clamp(2.2rem, 4.5vw, 2.8rem);
   font-weight: 600;
 }
 
 main > .sec-4 > .bottom-box > .circles > span:last-child {
-  font-size: 1.6rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.6rem);
   font-weight: 500;
 }
 /* main > sec-5 --------------------------------------------------------------- */
 main > .sec-5 {
   width: 100dvw;
-  min-width: 192rem;
+  /* min-width: 192rem; */
   height: 108dvh;
+  min-height: 108rem;
   position: relative;
   cursor: default;
+  white-space: nowrap;
 }
 
 main > .sec-5 > .bg-container {
@@ -981,17 +987,17 @@ main > .sec-5 > .text-container > .top-box {
 }
 
 main > .sec-5 > .text-container > .top-box > span:nth-child(1) {
-  font-size: 2.4rem;
+  font-size: clamp(2rem, 4.5vw, 2.4rem);
   font-weight: 600;
 }
 
 main > .sec-5 > .text-container > .top-box > h4 {
-  font-size: 6.4rem;
+  font-size: clamp(4.8rem, 4.5vw, 6.4rem);
   font-weight: 600;
 }
 
 main > .sec-5 > .text-container > .top-box > span:nth-child(3) {
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 4.5vw, 1.6rem);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -1017,23 +1023,24 @@ main > .sec-5 > .text-container > .bottom-box > .value-wrap > .left-box {
   text-align: left;
 }
 
-
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .left-box > span:nth-child(1) {
   font-weight: 600;
-  font-size: 3.8rem;
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .left-box > span:nth-child(2) {
   font-weight: 400;
-  font-size: 2.4rem;
+  font-size: clamp(1.8rem, 4.5vw, 2.4rem);
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .center-box {
   font-weight: 400;
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 4.5vw, 2rem);
   text-align: left;
   flex: 1 0 0;
-  padding-left: 22.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .right-box > a > img {
@@ -1049,6 +1056,7 @@ main > .sec-6 {
   width: 100dvw;
   min-width: 192rem;
   height: 118dvh;
+  min-height: 118rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1159,12 +1167,49 @@ main > .sec-6 > .top-box > .category-search-tag > .category-box > .split-box > .
   background-color: var(--primary-color);
 }
 
-
-main > .sec-6 > .top-box > .search-box {
+main > .sec-6 > .top-box > .search-wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.2rem;
+  margin-top: 2.4rem;
+}
+
+main > .sec-6 > .top-box > .search-wrap > #search {
+  display: block;
+  border-radius: 2.4rem;
+  padding: 1.6rem 3.2rem;
+  width: 100rem;
+  border: 0.05rem solid rgba(109, 109, 109, 0.5);
+  color: var(--color-black);
+  transition: all 0.2s ease;
+  font-size: 1.6rem;
+  font-family: "Pretendard";
+  font-weight: normal;
+}
+
+main > .sec-6 > .top-box > .search-wrap > #search::placeholder {
+  border: none;
+  stroke: none;
+  color: var(--main-color-gray);
+}
+
+main > .sec-6 > .top-box > .search-wrap > #search:focus::placeholder {
+  color: var(--main-color-white);
+}
+
+main > .sec-6 > .top-box > .search-wrap > #search:focus {
+  color: var(--color-white);
+  border: none;
+  background: rgba(0, 117, 197, 0.6);
+  outline: none;
+}
+
+main > .sec-6 > .top-box > .search-wrap > #btnSearch {
+  display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .goods-slider {
@@ -1232,6 +1277,7 @@ main > .sec-7 {
   width: 100dvw;
   min-width: 192rem;
   height: 108dvh;
+  min-height: 108rem;
   padding: 10rem 0;
   display: flex;
   flex-direction: column;
@@ -1382,9 +1428,12 @@ main > .sec-7 > .marquee-wrapper > .marquee-box > .news-pages > .text-container 
   font-size: 1.4rem;
   color: rgba(161, 161, 162, 0.8);
 
-/* main > banner --------------------------------------------------------------- */}
+  /* main > banner --------------------------------------------------------------- */
+}
 main > .banner {
   width: 100dvw;
+  min-width: 192rem;
+
   padding: 6rem 0;
   display: flex;
   justify-content: center;
@@ -1452,6 +1501,7 @@ main > .sec-8 {
   width: 100dvw;
   min-width: 192rem;
   height: 108dvh;
+  min-height: 108rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1516,6 +1566,7 @@ footer {
   width: 100dvw;
   min-width: 192rem;
   height: 35rem;
+  min-height: 35rem;
   padding: 4.8rem 0;
   background-color: var(--main-color-gray);
   box-sizing: border-box;
