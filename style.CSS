@@ -127,7 +127,6 @@ img {
 /* header --------------------------------------------------------------- */
 header {
   width: 100dvw;
-  min-width: 192rem;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -480,7 +479,6 @@ main {
 /* main > sec-1 --------------------------------------------------------------- */
 main > .sec-1 {
   width: 100dvw;
-  min-width: 192rem;
   height: 108dvh;
   min-height: 108rem;
   position: relative;
@@ -525,7 +523,7 @@ main > .sec-1 > .text-container {
 
 main > .sec-1 > .text-container > h1 {
   color: var(--main-color-white);
-  font-size: clamp(3.2rem, 4.5vw, 6.4rem);
+  font-size: clamp(2.8rem, 4.5vw, 6.4rem);
   font-weight: 600;
   cursor: default;
   text-shadow: 0.4rem 0.4rem rgba(68, 68, 68, 0.2);
@@ -545,23 +543,24 @@ main > .sec-1 > .text-container > .text-en > img {
 
 main > .sec-1 > .text-container > .text-en > span {
   color: var(--main-color-white);
-  font-size: clamp(2.4rem, 4.5vw, 3.2rem);
+  font-size: clamp(2.2rem, 2.5vw, 3.2rem);
   font-weight: 600;
   cursor: default;
 }
 
 main > .sec-1 > .text-container > .custom-pagination {
   display: flex;
-  align-items: center;
+  align-items: center; 
+  text-align: center;
   gap: 1.2rem;
   color: var(--main-color-white);
-  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  font-size: clamp(1.6rem, 2vw, 2.2rem);
   font-weight: 500;
 }
 
 main > .sec-1 > .text-container > .custom-pagination > .progress-bar {
-  width: 22.4rem;
-  height: 1rem;
+  width: clamp(18rem, 12.5vw, 22.4rem);
+  height: clamp(0.6rem, 0.75vw, 1rem);
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 1.4rem;
   overflow: hidden;
@@ -596,6 +595,9 @@ main > .sec-1 > .text-container > .custom-pagination > .prev-btn > img,
 main > .sec-1 > .text-container > .custom-pagination > .current,
 .total {
   width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* main > sec-2 --------------------------------------------------------------- */
 .sec-2 {
@@ -1868,6 +1870,7 @@ footer > .ft-bottom-wrapper > .ft-bottom-box > .bottom-leftover > .ft-bottom-mar
 /* @medias wrapper --------------------------------------------------------------- */
 @media screen and (max-width: 1480px) {
   header > .hd-container {
+    margin: 0 2.4rem;
     justify-content: space-between;
     width: 100%;
   }
@@ -1890,6 +1893,30 @@ footer > .ft-bottom-wrapper > .ft-bottom-box > .bottom-leftover > .ft-bottom-mar
     display: block;
   }
 }
+
+@media screen and (max-width: 1480px) {
+  main > .sec-1 {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 1480px) {
+  main > .sec-1 > .text-container {
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 1480px) {
+  main > .sec-1 > .text-container > .text-en > img {
+    display: none;
+  }
+}
+
 /* @keyframes wrapper --------------------------------------------------------------- */
 @keyframes bgWave {
   0% {
