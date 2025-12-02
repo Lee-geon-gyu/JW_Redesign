@@ -6,10 +6,16 @@ gsap.registerPlugin(ScrollTrigger);
 // menuboxDropdown ------------------------------ //
 function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseenter(function () {
-    $(this).find("> ul > .bg-container").stop(true, true).slideDown(300);
+    $(this).find("> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container").stop(true, true).slideDown(300);
   });
   $("header > .hd-container > .menu-box").mouseleave(function () {
-    $(this).find("> ul > .bg-container").stop(true, true).slideUp(300);
+    $(this).find("> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container").stop(true, true).slideUp(300);
+  });
+  $("header > .hd-container > .menu-box").mouseenter(function () {
+    $(this).find("> ul > .bg-container-wrapper").stop(true, true).slideDown(300);
+  });
+  $("header > .hd-container > .menu-box").mouseleave(function () {
+    $(this).find("> ul > .bg-container-wrapper").stop(true, true).slideUp(300);
   });
 }
 // menuitemDropdown ------------------------------ //
