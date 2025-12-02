@@ -1124,7 +1124,7 @@ main > .sec-5 > .text-container {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12rem;
+  gap: 20rem;
 }
 
 main > .sec-5 > .text-container > .top-box {
@@ -1170,7 +1170,7 @@ main > .sec-5 > .text-container > .bottom-box > .value-wrap {
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .left-box {
-  flex: 4 0 0;
+  flex: 2 0 0;
   width: clamp(calc(27.5rem / 2), 25vw, 275px);
   text-align: left;
 }
@@ -1196,15 +1196,15 @@ main > .sec-5 > .text-container > .bottom-box > .value-wrap > .center-box {
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .right-box {
+  flex: 1 0 0;
   display: block;
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .right-box > a {
   display: block;
-  width: clamp(calc(4.8rem / 2), 2.75vw, 48px);
-  height: clamp(calc(4.8rem / 2), 2.75vw, 48px);
+  width: clamp(calc(4.8rem / 1.5), 2.75vw, 48px);
+  height: clamp(calc(4.8rem / 1.5), 2.75vw, 48px);
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 main > .sec-5 > .text-container > .bottom-box > .value-wrap > .right-box > a > img {
@@ -1985,7 +1985,7 @@ footer > .ft-bottom-wrapper > .ft-bottom-box > .bottom-leftover > .ft-bottom-mar
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1280px) {
   main > .sec-4 > .bottom-box {
     display: flex;
     flex-direction: column;
@@ -1995,7 +1995,7 @@ footer > .ft-bottom-wrapper > .ft-bottom-box > .bottom-leftover > .ft-bottom-mar
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1280px) {
   main > .sec-4 > .bg-container > img {
     animation: none;
   }
@@ -2007,11 +2007,18 @@ footer > .ft-bottom-wrapper > .ft-bottom-box > .bottom-leftover > .ft-bottom-mar
   }
 }
 
-@media screen and (max-width: 768px) {
-  main > .sec-5 > .text-container > .bottom-box {
+@media screen and (max-width: 1024px) {
+  main > .sec-5 > .text-container > .bottom-box > .value-wrap > .left-box {
+    flex: 14 0 0;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  main > .sec-5 > .text-container > .bottom-box > .value-wrap > .center-box {
     display: none;
   }
 }
+
 
 @media screen and (max-width: 1024px) {
   main > .sec-8 {
