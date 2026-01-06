@@ -6,13 +6,26 @@ gsap.registerPlugin(ScrollTrigger);
 // menuboxDropdown ------------------------------ //
 function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseenter(function () {
-    $(this).find("> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container").stop(true, true).slideDown(300);
+    $(this)
+      .find(
+        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container"
+      )
+      .stop(true, true)
+      .slideDown(300);
   });
   $("header > .hd-container > .menu-box").mouseleave(function () {
-    $(this).find("> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container").stop(true, true).slideUp(300);
+    $(this)
+      .find(
+        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container"
+      )
+      .stop(true, true)
+      .slideUp(300);
   });
   $("header > .hd-container > .menu-box").mouseenter(function () {
-    $(this).find("> ul > .bg-container-wrapper").stop(true, true).slideDown(300);
+    $(this)
+      .find("> ul > .bg-container-wrapper")
+      .stop(true, true)
+      .slideDown(300);
   });
   $("header > .hd-container > .menu-box").mouseleave(function () {
     $(this).find("> ul > .bg-container-wrapper").stop(true, true).slideUp(300);
@@ -35,32 +48,80 @@ function menuitemDropdown__init() {
 }
 // translateboxDropdown ------------------------------ //
 function translateboxDropdown__init() {
-  $("header > .hd-container > .side-box > .language-box > .translate-box-1").click(function () {
+  $(
+    "header > .hd-container > .side-box > .language-box > .translate-box-1"
+  ).click(function () {
     $(this).parent().find("> .translate-box-2").toggleClass("drop");
     $(this).find("> a > img").toggleClass("rotate");
   });
 
-  $("header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span").mouseenter(function () {
+  $(
+    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span"
+  ).mouseenter(function () {
     $(this).addClass("hover");
   });
 
-  $("header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span").mouseleave(function () {
+  $(
+    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span"
+  ).mouseleave(function () {
     $(this).removeClass("hover");
   });
 
-  $("header > .hd-container > .side-box > .language-box > .translate-box-2").click(function () {
+  $(
+    "header > .hd-container > .side-box > .language-box > .translate-box-2"
+  ).click(function () {
     $(this).removeClass("drop");
     $(this).parent().find("> .translate-box-1 > a > img").toggleClass("rotate");
   });
 
   $(document).click(function (e) {
-    const $dropdown = $("header > .hd-container > .side-box > .language-box > .translate-box-2");
-    const $button = $("header > .hd-container > .side-box > .language-box > .translate-box-1");
+    const $dropdown = $(
+      "header > .hd-container > .side-box > .language-box > .translate-box-2"
+    );
+    const $button = $(
+      "header > .hd-container > .side-box > .language-box > .translate-box-1"
+    );
 
-    if (!$button.is(e.target) && $button.has(e.target).length === 0 && !$dropdown.is(e.target) && $dropdown.has(e.target).length === 0) {
+    if (
+      !$button.is(e.target) &&
+      $button.has(e.target).length === 0 &&
+      !$dropdown.is(e.target) &&
+      $dropdown.has(e.target).length === 0
+    ) {
       $dropdown.removeClass("drop");
       $button.find("> a > img").removeClass("rotate");
     }
+  });
+}
+// tabAsideContainer ------------------------------ //
+function tabAsideContainer__init() {
+  $(".tab-aside > .aside-menu-box > ul > .menu-item-initial").click(
+    function () {
+      $(this).find("> ul").stop(true, true).slideDown(750);
+    }
+  );
+  $(".tab-aside > .aside-menu-box > ul > .menu-item-initial").mouseleave(
+    function () {
+      $(this).find("> ul").stop(true, true).slideUp(500);
+    }
+  );
+}
+// tabAsideContainerOpen ------------------------------ //
+function tabAsideContainerOpen__init() {
+  $("header > .hd-container > .side-box > .tab-box").click(function () {
+    $(this)
+      .parent()
+      .parent()
+      .parent()
+      .siblings()
+      .find("> .tab-aside")
+      .removeClass("close");
+  });
+}
+// tabAsideContainerClose ------------------------------ //
+function tabAsideContainerClose__init() {
+  $(".tab-aside > .close-btn-container > .close-btn").click(function () {
+    $(this).parent().parent().addClass("close");
   });
 }
 // swiperCustom ------------------------------ //
@@ -120,7 +181,9 @@ function swiperCustom__init() {
 // headerChangeOnSection ------------------------------ //
 function headerChangeOnSection__init() {
   const header = document.querySelector("header");
-  const target = document.querySelectorAll(`.sec-2, .sec-6, .sec-7, .sec-8, .banner`);
+  const target = document.querySelectorAll(
+    `.sec-2, .sec-6, .sec-7, .sec-8, .banner`
+  );
   console.log(target);
 
   target.forEach((el) => {
@@ -322,7 +385,8 @@ function searchBoxOptions__init() {
     });
 
     input.addEventListener("blur", () => {
-      if (input.value.trim() === "" && !input.placeholder) input.value = defaultText;
+      if (input.value.trim() === "" && !input.placeholder)
+        input.value = defaultText;
     });
 
     document.getElementById("btnSearch").addEventListener("click", () => {
@@ -346,6 +410,9 @@ function searchBoxOptions__init() {
 menuboxDropdown__init();
 menuitemDropdown__init();
 translateboxDropdown__init();
+tabAsideContainer__init();
+tabAsideContainerOpen__init();
+tabAsideContainerClose__init();
 swiperCustom__init();
 bottomSelectboxDropUp__init();
 scrollTrigger__init();
