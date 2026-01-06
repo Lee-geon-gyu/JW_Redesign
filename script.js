@@ -406,6 +406,10 @@ function searchBoxOptions__init() {
     });
   })();
 }
+
+[...document.querySelectorAll("*")].filter(
+  (el) => el.scrollWidth > document.documentElement.clientWidth
+);
 // Functions Operate Key ------------------------------ //
 menuboxDropdown__init();
 menuitemDropdown__init();
