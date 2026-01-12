@@ -3,6 +3,41 @@ console.clear();
 AOS.init();
 gsap.registerPlugin(ScrollTrigger);
 
+// loadingPage ------------------------------ //
+function loadingPage__init() {
+  $("html, body").css({
+    overflow: "hidden",
+    height: "100%",
+  });
+
+  function preventScroll(e) {
+    e.preventDefault();
+  }
+
+  window.addEventListener("wheel", preventScroll, { passive: false });
+  window.addEventListener("touchmove", preventScroll, { passive: false });
+
+  function preventKey(e) {
+    const keys = [32, 37, 38, 39, 40];
+    if (keys.includes(e.keyCode)) {
+      e.preventDefault();
+    }
+  }
+  document.addEventListener("keydown", preventKey);
+
+  setTimeout(() => {
+    $(".loading-page").fadeOut(1500, function () {
+      $("html, body").css({
+        overflow: "",
+        height: "",
+      });
+
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      document.removeEventListener("keydown", preventKey);
+    });
+  }, 1000);
+}
 // menuboxDropdown ------------------------------ //
 function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseenter(function () {
@@ -95,16 +130,15 @@ function translateboxDropdown__init() {
 }
 // tabAsideContainer ------------------------------ //
 function tabAsideContainer__init() {
-  $(".tab-aside > .aside-menu-box > ul > .menu-item-initial").click(
-    function () {
-      $(this).find("> ul").stop(true, true).slideDown(750);
-    }
-  );
-  $(".tab-aside > .aside-menu-box > ul > .menu-item-initial").mouseleave(
-    function () {
-      $(this).find("> ul").stop(true, true).slideUp(500);
-    }
-  );
+  const $items = $(".tab-aside > .aside-menu-box > ul > .menu-item-initial");
+
+  $items.on("click", function () {
+    const $current = $(this);
+
+    $items.not($current).find("> ul").stop(true, true).slideUp(500);
+
+    $current.find("> ul").stop(true, true).slideToggle(500);
+  });
 }
 // tabAsideContainerOpen ------------------------------ //
 function tabAsideContainerOpen__init() {
@@ -453,6 +487,7 @@ function searchBoxOptions__init() {
   (el) => el.scrollWidth > document.documentElement.clientWidth
 );
 // Functions Operate Key ------------------------------ //
+loadingPage__init();
 menuboxDropdown__init();
 menuitemDropdown__init();
 translateboxDropdown__init();
