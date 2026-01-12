@@ -852,7 +852,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 
 .sec-responsive > .content-wrap > .bg-container > img {
   width: 100%;
-  height: auto;
+  height: 70dvh;
   object-fit: var(--object-cover);
   filter: brightness(0.5);
 }
@@ -1730,20 +1730,17 @@ main > .sec-6 > .top-box > .search-wrap img {
 
 .goods-slider {
   width: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: var(--main-color-gray);
   padding: var(--margin-grid-system);
-  overflow: hidden;
 }
 
-.goods-slider .goods-box {
+.goods-slider .swiper-wrapper {
   width: 100%;
+}
+
+.goods-slider .swiper-wrapper .goods-box {
   max-width: 53rem;
   height: 52rem;
-  flex: 1 0 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1754,7 +1751,7 @@ main > .sec-6 > .top-box > .search-wrap img {
   transition: all 0.4s linear;
 }
 
-.goods-slider .goods-box > a {
+.goods-slider .swiper-wrapper .goods-box > a {
   width: 20rem;
   height: 20rem;
   display: flex;
@@ -1765,89 +1762,53 @@ main > .sec-6 > .top-box > .search-wrap img {
   overflow: visible;
 }
 
-.goods-slider .goods-box > a > img {
+.goods-slider .swiper-wrapper .goods-box > a > img {
   width: 100%;
   height: auto;
   object-fit: var(--object-cover);
   transition: all 0.4s linear;
 }
 
-.goods-slider .goods-box > span:nth-child(1) {
+.goods-slider .swiper-wrapper .goods-box > span:nth-child(1) {
   font-weight: 700;
-  font-size: clamp(calc(24px / 2), calc(1.25vw / 2), calc(24px / 1.75));
+  font-size: clamp(calc(24px / 2), 1.25vw, calc(24px / 1.25));
   color: var(--primary-color);
 }
 
-.goods-slider .goods-box > span:nth-child(2) {
-  font-size: clamp(calc(28px / 2), 0.75vw, calc(30px / 1.75));
+.goods-slider .swiper-wrapper .goods-box > span:nth-child(2) {
+  font-size: clamp(calc(28px / 2), 1.5vw, calc(30px / 1.25));
   font-weight: 700;
   color: var(--color-black);
 }
 
-.goods-slider .goods-box > span:nth-child(4) {
-  font-size: clamp(calc(22px / 2), 0.5vw, calc(22px / 1.75));
+.goods-slider .swiper-wrapper .goods-box > span:nth-child(4) {
+  font-size: clamp(calc(22px / 2), 1vw, calc(22px / 1.5));
   font-weight: 500;
   line-height: 1.5;
   color: var(--color-black);
   white-space: nowrap;
 }
 
-.slick-list {
-  min-width: 350px;
+.goods-slider .swiper-wrapper .swiper-slide {
+  opacity: 0.4;
+  transform: scale(0.9);
 }
 
-.slick-slider .slick-slide {
-  opacity: 0.3;
-  transition: all 0.4s ease;
-}
-
-.slick-slider .slick-slide:hover {
+.goods-slider .swiper-wrapper .swiper-slide:hover {
   opacity: 1;
-  transition: all 0.4s ease;
 }
 
-.slick-slider .slick-slide img {
-  transform: scale(0.8);
-  transition: all 0.4s ease;
-}
-
-.slick-slider .slick-center {
-  justify-content: space-between;
+.goods-slider .swiper-wrapper .swiper-slide-active {
   opacity: 1;
-  transition: all 0.4s linear;
+  transform: scale(1);
 }
 
-.slick-slider .slick-center > span:nth-child(1) {
-  font-weight: 700;
-  font-size: clamp(14px, 1.25vw, 22px);
-  color: var(--primary-color);
-  transition: all 0.6s linear;
+.goods-slider .swiper-wrapper .swiper-slide span {
+  opacity: 0;
 }
 
-.slick-slider .slick-center > span:nth-child(2) {
-  font-size: clamp(20px, 1.5vw, 30px);
-  font-weight: 700;
-  color: var(--color-black);
-  transition: all 0.6s linear;
-}
-
-.slick-slider .slick-center > span:nth-child(4) {
-  font-size: clamp(12px, 1vw, 18px);
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--color-black);
-  white-space: nowrap;
-  transition: all 0.6s linear;
-}
-
-.slick-slider .slick-center img {
-  transform: scale(1.1);
-  transition: all 0.4s ease;
-}
-
-.slick-slider .slick-center:hover img {
-  transform: scale(1.3);
-  transition: all 0.4s ease;
+.goods-slider .swiper-wrapper .swiper-slide-active span {
+  opacity: 1;
 }
 /* main > sec-7 --------------------------------------------------------------- */
 main > .sec-7 {
@@ -2523,6 +2484,7 @@ footer
     justify-content: center;
     align-items: center;
     gap: 4.8rem;
+    pointer-events: none;
   }
 }
 
@@ -2565,6 +2527,12 @@ footer
 @media screen and (max-width: 1024px) {
   main > .sec-5 > .text-container > .bottom-box > .value-wrap > .center-box {
     display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  main > .sec-6 {
+    min-height: 0;
   }
 }
 
