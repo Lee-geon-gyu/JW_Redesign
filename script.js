@@ -139,6 +139,14 @@ function tabAsideContainer__init() {
 
     $current.find("> ul").stop(true, true).slideToggle(500);
   });
+
+  $(".tab-aside > .close-btn-container > .close-btn").on("click", function () {
+    $(this)
+      .closest(".tab-aside")
+      .find(".menu-item-initial > ul")
+      .stop(true, true)
+      .slideUp(500);
+  });
 }
 // tabAsideContainerOpen ------------------------------ //
 function tabAsideContainerOpen__init() {
@@ -215,21 +223,43 @@ function swiperCustom__init() {
 // headerChangeOnSection ------------------------------ //
 function headerChangeOnSection__init() {
   const header = document.querySelector("header");
-  const target = document.querySelectorAll(
-    `.sec-2, .sec-6, .sec-7, .sec-8, .banner`
-  );
-  console.log(target);
 
-  target.forEach((el) => {
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top top",
-      end: "bottom top",
-      onEnter: () => header.classList.add("on-sec-w"),
-      onLeave: () => header.classList.remove("on-sec-w"),
-      onEnterBack: () => header.classList.add("on-sec-w"),
-      onLeaveBack: () => header.classList.remove("on-sec-w"),
-    });
+  ScrollTrigger.matchMedia({
+    "(min-width: 1280px)": function () {
+      const targets = document.querySelectorAll(
+        ".sec-2, .sec-6, .sec-7, .sec-8, .banner"
+      );
+
+      targets.forEach((el) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          onEnter: () => header.classList.add("on-sec-w"),
+          onLeave: () => header.classList.remove("on-sec-w"),
+          onEnterBack: () => header.classList.add("on-sec-w"),
+          onLeaveBack: () => header.classList.remove("on-sec-w"),
+        });
+      });
+    },
+
+    "(max-width: 1278px)": function () {
+      const targets = document.querySelectorAll(
+        ".sec-6, .sec-7, .sec-8, .banner"
+      );
+
+      targets.forEach((el) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          onEnter: () => header.classList.add("on-sec-w"),
+          onLeave: () => header.classList.remove("on-sec-w"),
+          onEnterBack: () => header.classList.add("on-sec-w"),
+          onLeaveBack: () => header.classList.remove("on-sec-w"),
+        });
+      });
+    },
   });
 }
 // bottomSelectboxDropUp ------------------------------ //
