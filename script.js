@@ -1,7 +1,83 @@
 console.clear();
 
-AOS.init();
 gsap.registerPlugin(ScrollTrigger);
+
+// Section text and action reveal sequence ------------------------------ //
+function sectionAosSequence__init() {
+  const sectionGroups = [
+    [
+      ".sec-3 > .left-box > span:nth-child(1)",
+      ".sec-3 > .left-box > h2",
+      ".sec-3 > .left-box > span:nth-child(3)",
+      ".sec-3 > .left-box > span:nth-child(4)",
+      ".sec-3 > .right-box > .produce-box",
+    ],
+    [
+      ".sec-4 > .top-box > span:nth-child(1)",
+      ".sec-4 > .top-box > h4",
+      ".sec-4 > .top-box > span:nth-child(3)",
+      ".sec-4 > .top-box > span:nth-child(4)",
+      ".sec-4 > .bottom-box > .circles",
+    ],
+    [
+      ".sec-5 > .text-container > .top-box > span:nth-child(1)",
+      ".sec-5 > .text-container > .top-box > h4",
+      ".sec-5 > .text-container > .top-box > span:nth-child(3)",
+      ".sec-5 > .text-container > .bottom-box > .value-wrap",
+    ],
+    [
+      ".sec-6 > .top-box > span",
+      ".sec-6 > .top-box > h4",
+      ".sec-6 > .top-box > .word-search-tag",
+      ".sec-6 > .top-box > .category-search-tag",
+      ".sec-6 > .top-box > .search-wrap",
+      ".sec-6 > .goods-slider",
+    ],
+    [
+      ".sec-7 > .top-box > span:nth-child(1)",
+      ".sec-7 > .top-box > h4",
+      ".sec-7 > .top-box > span:nth-child(3)",
+      ".sec-7 > .top-box > span:nth-child(4)",
+      ".sec-7 > .marquee-wrapper .news-pages",
+    ],
+    [
+      ".sec-8 > .text-container > span:nth-child(1)",
+      ".sec-8 > .text-container > h2",
+      ".sec-8 > .text-container > span:nth-child(3)",
+      ".sec-8 > .text-container > .contact-box",
+    ],
+  ];
+
+  sectionGroups.forEach((selectors, groupIndex) => {
+    // sec-5는 고정 스크롤 타임라인에서 별도로 연출한다.
+    if (groupIndex === 2) return;
+
+    const elements = selectors.flatMap((selector) => [
+      ...document.querySelectorAll(selector),
+    ]);
+
+    elements.forEach((element, index) => {
+      element.dataset.aos = "fade-right";
+      element.dataset.aosDelay = String(Math.min(index * 45, 225));
+      element.dataset.aosDuration = "480";
+      element.dataset.aosOffset = "160";
+      element.dataset.aosOnce = "true";
+
+      // Lower content in sec-4 and sec-5 should start with its section,
+      // instead of waiting until each individual item reaches the viewport.
+      if (groupIndex === 1 || groupIndex === 2) {
+        element.dataset.aosAnchor = groupIndex === 1 ? ".sec-4" : ".sec-5";
+        element.dataset.aosAnchorPlacement = "top-bottom";
+        element.dataset.aosDelay = String(Math.min(index * 35, 175));
+      }
+    });
+  });
+
+  AOS.init({
+    easing: "ease-out-cubic",
+    once: true,
+  });
+}
 
 // loadingPage ------------------------------ //
 function loadingPage__init() {
@@ -35,6 +111,11 @@ function loadingPage__init() {
       window.removeEventListener("wheel", preventScroll);
       window.removeEventListener("touchmove", preventScroll);
       document.removeEventListener("keydown", preventKey);
+
+      // The loading lock changes the document height, so below-the-fold AOS
+      // positions must be measured again after the page is released.
+      AOS.refreshHard();
+      ScrollTrigger.refresh();
     });
   }, 1000);
 }
@@ -43,7 +124,7 @@ function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseenter(function () {
     $(this)
       .find(
-        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container"
+        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container",
       )
       .stop(true, true)
       .slideDown(300);
@@ -51,7 +132,7 @@ function menuboxDropdown__init() {
   $("header > .hd-container > .menu-box").mouseleave(function () {
     $(this)
       .find(
-        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container"
+        "> ul > .bg-container-wrapper > .bg-container-wrapper > .bg-container",
       )
       .stop(true, true)
       .slideUp(300);
@@ -84,26 +165,26 @@ function menuitemDropdown__init() {
 // translateboxDropdown ------------------------------ //
 function translateboxDropdown__init() {
   $(
-    "header > .hd-container > .side-box > .language-box > .translate-box-1"
+    "header > .hd-container > .side-box > .language-box > .translate-box-1",
   ).click(function () {
     $(this).parent().find("> .translate-box-2").toggleClass("drop");
     $(this).find("> a > img").toggleClass("rotate");
   });
 
   $(
-    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span"
+    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span",
   ).mouseenter(function () {
     $(this).addClass("hover");
   });
 
   $(
-    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span"
+    "header > .hd-container > .side-box > .language-box > .translate-box-2 > a > .languages-wrapper > span",
   ).mouseleave(function () {
     $(this).removeClass("hover");
   });
 
   $(
-    "header > .hd-container > .side-box > .language-box > .translate-box-2"
+    "header > .hd-container > .side-box > .language-box > .translate-box-2",
   ).click(function () {
     $(this).removeClass("drop");
     $(this).parent().find("> .translate-box-1 > a > img").toggleClass("rotate");
@@ -111,10 +192,10 @@ function translateboxDropdown__init() {
 
   $(document).click(function (e) {
     const $dropdown = $(
-      "header > .hd-container > .side-box > .language-box > .translate-box-2"
+      "header > .hd-container > .side-box > .language-box > .translate-box-2",
     );
     const $button = $(
-      "header > .hd-container > .side-box > .language-box > .translate-box-1"
+      "header > .hd-container > .side-box > .language-box > .translate-box-1",
     );
 
     if (
@@ -225,9 +306,9 @@ function headerChangeOnSection__init() {
   const header = document.querySelector("header");
 
   ScrollTrigger.matchMedia({
-    "(min-width: 1280px)": function () {
+    "(min-width: 1281px)": function () {
       const targets = document.querySelectorAll(
-        ".sec-2, .sec-6, .sec-7, .sec-8, .banner"
+        ".sec-6, .sec-7, .banner, .sec-8",
       );
 
       targets.forEach((el) => {
@@ -243,9 +324,9 @@ function headerChangeOnSection__init() {
       });
     },
 
-    "(max-width: 1278px)": function () {
+    "(max-width: 1280px)": function () {
       const targets = document.querySelectorAll(
-        ".sec-6, .sec-7, .sec-8, .banner"
+        ".sec-6, .sec-7, .banner, .sec-8",
       );
 
       targets.forEach((el) => {
@@ -277,7 +358,7 @@ function scrollTrigger__init() {
     scrollTrigger: {
       trigger: ".sec-2 > .content-wrap",
       start: "top top",
-      end: "+=850%",
+      end: "+=960%",
       pin: true,
       scrub: 1,
       invalidateOnRefresh: true,
@@ -285,7 +366,28 @@ function scrollTrigger__init() {
     },
   });
 
-  tl.fromTo(".t1", { opacity: 0 }, { opacity: 1, duration: 3 })
+  tl.fromTo(
+    ".sec-2 .bg-container",
+    {
+      width: "90%",
+      height: "70%",
+      borderRadius: "9999px",
+    },
+    {
+      width: "100%",
+      height: "100%",
+      borderRadius: "0px",
+      duration: 2,
+      ease: "none",
+    },
+  )
+    .fromTo(
+      ".sec-2 .bg-container > img",
+      { filter: "brightness(1)" },
+      { filter: "brightness(0.3)", duration: 2, ease: "none" },
+      "<",
+    )
+    .fromTo(".t1", { opacity: 0 }, { opacity: 1, duration: 3 })
     .to(".t1", { opacity: 0, duration: 0 })
     .fromTo(".t2", { opacity: 0 }, { opacity: 1, duration: 3 }, "<")
     .to(".t2", { opacity: 0, duration: 0 })
@@ -293,8 +395,241 @@ function scrollTrigger__init() {
     .to(".t3", { opacity: 0, duration: 0 })
     .fromTo(".t4", { opacity: 0 }, { opacity: 1, duration: 3 }, "<")
     .to(".t4", { opacity: 0, duration: 0 })
-    .fromTo(".t5", { opacity: 0 }, { opacity: 1, duration: 3 }, "<")
-    .to(".sec-2 .bg-container", { opacity: 0, duration: 3 }, "<");
+    .fromTo(".t5", { opacity: 0 }, { opacity: 1, duration: 3 }, "<");
+
+  ScrollTrigger.matchMedia({
+    "(min-width: 1281px) and (prefers-reduced-motion: no-preference)":
+      function () {
+        const horizontalTrack = document.querySelector(".sec-3-4-horizontal");
+
+        if (!horizontalTrack) return;
+
+        const sec3Panel = horizontalTrack.querySelector(".sec-3");
+        const sec4Panel = horizontalTrack.querySelector(".sec-4");
+        const sec5Panel = horizontalTrack.querySelector(".sec-5");
+        const sec3Text = sec3Panel?.querySelector(":scope > .left-box");
+        const sec3Cards = sec3Panel?.querySelector(":scope > .right-box");
+        const sec4Text = sec4Panel?.querySelector(":scope > .top-box");
+        const sec4Cards = sec4Panel?.querySelector(":scope > .bottom-box");
+        const sec4Circles = sec4Cards?.querySelectorAll(":scope > .circles");
+        const sec5TextContainer = sec5Panel?.querySelector(
+          ":scope > .text-container",
+        );
+        const sec5Top = sec5TextContainer?.querySelector(":scope > .top-box");
+        const sec5Bottom = sec5TextContainer?.querySelector(
+          ":scope > .bottom-box",
+        );
+        const sec5Items = sec5Bottom?.querySelectorAll(":scope > .value-wrap");
+        const sec5Background = sec5Panel?.querySelector(
+          ":scope > .bg-container > img",
+        );
+
+        if (
+          !sec3Panel ||
+          !sec4Panel ||
+          !sec5Panel ||
+          !sec3Text ||
+          !sec3Cards ||
+          !sec4Text ||
+          !sec4Cards ||
+          !sec4Circles?.length ||
+          !sec5TextContainer ||
+          !sec5Top ||
+          !sec5Bottom ||
+          !sec5Items?.length ||
+          !sec5Background
+        )
+          return;
+
+        const horizontalTimeline = gsap.timeline({
+          scrollTrigger: {
+            id: "sec3-sec4-horizontal",
+            trigger: horizontalTrack,
+            start: "top top",
+            end: () => `+=${window.innerWidth + window.innerHeight * 2.7}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        gsap.set(sec4Panel, { xPercent: -100, pointerEvents: "none" });
+        gsap.set(sec4Text, { opacity: 0 });
+        gsap.set(sec4Cards, { xPercent: 100 });
+        gsap.set(sec4Circles, { opacity: 0 });
+        gsap.set(sec5Panel, { yPercent: 100 });
+        gsap.set(sec5Background, { filter: "brightness(0.7)" });
+        gsap.set(sec5Top, {
+          y: () =>
+            (sec5Bottom.offsetHeight +
+              (parseFloat(getComputedStyle(sec5TextContainer).gap) || 0)) /
+            2,
+        });
+        gsap.set(sec5Items, { opacity: 0 });
+        gsap.set(sec5Bottom, { pointerEvents: "none" });
+
+        horizontalTimeline
+          .to(sec4Cards, { xPercent: 0, duration: 1, ease: "none" }, 0)
+          .to(sec3Cards, { opacity: 0, duration: 0.2, ease: "none" }, 0.34)
+          .to(
+            sec4Circles,
+            {
+              opacity: 1,
+              duration: 0.55,
+              stagger: 0.15,
+              ease: "none",
+            },
+            0.15,
+          )
+          .to(sec3Text, { opacity: 0, duration: 0.18, ease: "none" }, 0.72)
+          .to(sec4Text, { opacity: 1, duration: 0.18, ease: "none" }, 0.82)
+          .set(sec4Panel, { pointerEvents: "auto" })
+          .to({}, { duration: 0.28 })
+          .set(sec4Panel, { pointerEvents: "none" })
+          .to(sec5Panel, { yPercent: 0, duration: 1, ease: "none" })
+          .to(
+            [sec3Panel, sec4Panel],
+            { filter: "blur(10px)", duration: 0.82, ease: "none" },
+            "<",
+          )
+          .to(
+            [sec3Panel, sec4Panel],
+            { opacity: 0, duration: 0.38, ease: "none" },
+            "<0.42",
+          )
+          .to({}, { duration: 0.18 })
+          .to(sec5Background, {
+            filter: "brightness(0.3)",
+            duration: 0.9,
+            ease: "none",
+          })
+          .to(sec5Top, { y: 0, duration: 0.9, ease: "none" }, "<")
+          .set(sec5Bottom, { pointerEvents: "auto" })
+          .to(
+            sec5Items,
+            { opacity: 1, duration: 0.55, stagger: 0.12, ease: "none" },
+            "<0.2",
+          )
+          .to({}, { duration: 0.35 });
+      },
+    "(max-width: 1280px) and (prefers-reduced-motion: no-preference)":
+      function () {
+        const responsiveTrack = document.querySelector(".sec-3-4-horizontal");
+
+        if (!responsiveTrack) return;
+
+        const sec3Panel = responsiveTrack.querySelector(".sec-3");
+        const sec4Panel = responsiveTrack.querySelector(".sec-4");
+        const sec5Panel = responsiveTrack.querySelector(".sec-5");
+        const sec3Text = sec3Panel?.querySelector(":scope > .left-box");
+        const sec3Cards = sec3Panel?.querySelector(":scope > .right-box");
+        const sec4Text = sec4Panel?.querySelector(":scope > .top-box");
+        const sec4Circles = sec4Panel?.querySelectorAll(
+          ":scope > .bottom-box > .circles",
+        );
+        const sec5TextContainer = sec5Panel?.querySelector(
+          ":scope > .text-container",
+        );
+        const sec5Top = sec5TextContainer?.querySelector(":scope > .top-box");
+        const sec5Bottom = sec5TextContainer?.querySelector(
+          ":scope > .bottom-box",
+        );
+        const sec5Items = sec5Bottom?.querySelectorAll(":scope > .value-wrap");
+        const sec5Background = sec5Panel?.querySelector(
+          ":scope > .bg-container > img",
+        );
+
+        if (
+          !sec3Panel ||
+          !sec4Panel ||
+          !sec5Panel ||
+          !sec3Text ||
+          !sec3Cards ||
+          !sec4Text ||
+          !sec4Circles?.length ||
+          !sec5TextContainer ||
+          !sec5Top ||
+          !sec5Bottom ||
+          !sec5Items?.length ||
+          !sec5Background
+        )
+          return;
+
+        gsap.set(sec4Panel, { pointerEvents: "none" });
+        gsap.set(sec4Text, { opacity: 0 });
+        gsap.set(sec4Circles, { opacity: 0, xPercent: 70 });
+        gsap.set(sec5Panel, { yPercent: 100 });
+        gsap.set(sec5Background, { filter: "brightness(0.7)" });
+        gsap.set(sec5Top, {
+          y: () =>
+            (sec5Bottom.offsetHeight +
+              (parseFloat(getComputedStyle(sec5TextContainer).gap) || 0)) /
+            2,
+        });
+        gsap.set(sec5Items, { opacity: 0 });
+        gsap.set(sec5Bottom, { pointerEvents: "none" });
+
+        const responsiveTimeline = gsap.timeline({
+          scrollTrigger: {
+            id: "sec3-sec4-responsive",
+            trigger: responsiveTrack,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 3.7}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        responsiveTimeline
+          .to(sec3Cards, { opacity: 0, duration: 0.28, ease: "none" }, 0.2)
+          .to(
+            sec4Circles,
+            {
+              opacity: 1,
+              xPercent: 0,
+              duration: 0.5,
+              stagger: 0.12,
+              ease: "none",
+            },
+            0.28,
+          )
+          .to(sec3Text, { opacity: 0, duration: 0.18, ease: "none" }, 0.7)
+          .to(sec4Text, { opacity: 1, duration: 0.18, ease: "none" }, 0.8)
+          .set(sec4Panel, { pointerEvents: "auto" })
+          .to({}, { duration: 0.28 })
+          .set(sec4Panel, { pointerEvents: "none" })
+          .to(sec5Panel, { yPercent: 0, duration: 1, ease: "none" })
+          .to(
+            [sec3Panel, sec4Panel],
+            { filter: "blur(10px)", duration: 0.82, ease: "none" },
+            "<",
+          )
+          .to(
+            [sec3Panel, sec4Panel],
+            { opacity: 0, duration: 0.38, ease: "none" },
+            "<0.42",
+          )
+          .to({}, { duration: 0.18 })
+          .to(sec5Background, {
+            filter: "brightness(0.3)",
+            duration: 0.9,
+            ease: "none",
+          })
+          .to(sec5Top, { y: 0, duration: 0.9, ease: "none" }, "<")
+          .set(sec5Bottom, { pointerEvents: "auto" })
+          .to(
+            sec5Items,
+            { opacity: 1, duration: 0.55, stagger: 0.12, ease: "none" },
+            "<0.2",
+          )
+          .to({}, { duration: 0.35 });
+      },
+  });
 
   headerChangeOnSection__init();
 
@@ -362,7 +697,7 @@ function headerHide__init() {
           ticking = true;
         }
       },
-      { passive: true }
+      { passive: true },
     );
 
     window.addEventListener("load", function () {
@@ -409,7 +744,7 @@ function marqueeSlide__init() {
         duration: 32,
         ease: "none",
         repeat: -1,
-      }
+      },
     );
 
     wrapper.onmouseenter = () => tl.pause();
@@ -514,9 +849,10 @@ function searchBoxOptions__init() {
 }
 
 [...document.querySelectorAll("*")].filter(
-  (el) => el.scrollWidth > document.documentElement.clientWidth
+  (el) => el.scrollWidth > document.documentElement.clientWidth,
 );
 // Functions Operate Key ------------------------------ //
+sectionAosSequence__init();
 loadingPage__init();
 menuboxDropdown__init();
 menuitemDropdown__init();
@@ -534,6 +870,7 @@ itemsSwiper__Init();
 searchBoxOptions__init();
 // Recalculating Global Triggers Load ----------------------------- //
 window.addEventListener("load", () => {
+  AOS.refreshHard();
   ScrollTrigger.refresh();
 });
 
