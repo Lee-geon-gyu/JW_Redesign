@@ -49,6 +49,9 @@ function sectionAosSequence__init() {
   ];
 
   sectionGroups.forEach((selectors, groupIndex) => {
+    // Sec-3 has a dedicated ScrollTrigger reveal synced to the Sec-2 exit.
+    if (groupIndex === 0) return;
+
     // sec-5는 고정 스크롤 타임라인에서 별도로 연출한다.
     if (groupIndex === 2) return;
 
@@ -57,7 +60,7 @@ function sectionAosSequence__init() {
     ]);
 
     elements.forEach((element, index) => {
-      element.dataset.aos = "fade-right";
+      element.dataset.aos = "fade-up";
       element.dataset.aosDelay = String(Math.min(index * 45, 225));
       element.dataset.aosDuration = "480";
       element.dataset.aosOffset = "160";
@@ -351,8 +354,17 @@ function bottomSelectboxDropUp__init() {
   });
 }
 // GSAP scrollTrigger ------------------------------ //
-function scrollTrigger__init() {
+function scrollTriggerLegacy__unused() {
   ScrollTrigger.getAll().forEach((st) => st.kill());
+
+  const sec2Background = document.querySelector(".sec-2 .bg-container > img");
+  const sec3Panel = document.querySelector(".sec-3-4-horizontal > .sec-3");
+  const sec3Content = sec3Panel
+    ? [
+        sec3Panel.querySelector(":scope > .left-box"),
+        sec3Panel.querySelector(":scope > .right-box"),
+      ].filter(Boolean)
+    : [];
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -396,6 +408,43 @@ function scrollTrigger__init() {
     .fromTo(".t4", { opacity: 0 }, { opacity: 1, duration: 3 }, "<")
     .to(".t4", { opacity: 0, duration: 0 })
     .fromTo(".t5", { opacity: 0 }, { opacity: 1, duration: 3 }, "<");
+
+  if (sec2Background) {
+    tl.fromTo(
+      sec2Background,
+      { yPercent: -4 },
+      {
+        yPercent: 4,
+        duration: 2.4,
+        ease: "none",
+        force3D: true,
+      },
+    );
+  }
+
+  if (sec3Content.length) {
+    gsap.fromTo(
+      sec3Content,
+      {
+        autoAlpha: 0,
+        y: 40,
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.08,
+        ease: "none",
+        scrollTrigger: {
+          id: "sec2-sec3-content-reveal",
+          trigger: ".sec-3-4-horizontal",
+          start: "top 92%",
+          end: "top 18%",
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
+  }
 
   ScrollTrigger.matchMedia({
     "(min-width: 1281px) and (prefers-reduced-motion: no-preference)":
@@ -635,6 +684,291 @@ function scrollTrigger__init() {
 
   ScrollTrigger.refresh();
 }
+// Unified Sec-2 -> Sec-3 transition and following panel sequence ------------ //
+function scrollTrigger__init() {
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+  const transition = document.querySelector(".sec-2-4-transition");
+  const backgroundLayer = transition?.querySelector(".sec-2-4-bg");
+  const backgroundImage = backgroundLayer?.querySelector(":scope > img");
+  const sec2Panel = transition?.querySelector(":scope > .sec-2");
+  const horizontalTrack = transition?.querySelector(
+    ":scope > .sec-3-4-horizontal",
+  );
+  const sec3Panel = horizontalTrack?.querySelector(":scope > .sec-3");
+  const sec4Panel = horizontalTrack?.querySelector(":scope > .sec-4");
+  const sec5Panel = horizontalTrack?.querySelector(":scope > .sec-5");
+
+  if (
+    !transition ||
+    !backgroundLayer ||
+    !backgroundImage ||
+    !sec2Panel ||
+    !horizontalTrack ||
+    !sec3Panel ||
+    !sec4Panel ||
+    !sec5Panel
+  )
+    return;
+
+  const sec3Text = sec3Panel.querySelector(":scope > .left-box");
+  const sec3Cards = sec3Panel.querySelector(":scope > .right-box");
+  const sec4Text = sec4Panel.querySelector(":scope > .top-box");
+  const sec4Cards = sec4Panel.querySelector(":scope > .bottom-box");
+  const sec4Circles = sec4Cards.querySelectorAll(":scope > .circles");
+  const sec5TextContainer = sec5Panel.querySelector(":scope > .text-container");
+  const sec5Top = sec5TextContainer.querySelector(":scope > .top-box");
+  const sec5TopChildren = sec5Top.querySelectorAll(":scope > *");
+  const sec5TopSpans = sec5Top.querySelectorAll(":scope > span");
+  const sec5Bottom = sec5TextContainer.querySelector(":scope > .bottom-box");
+  const sec5Items = sec5Bottom.querySelectorAll(":scope > .value-wrap");
+  const sec5Background = sec5Panel.querySelector(
+    ":scope > .bg-container > img",
+  );
+
+  ScrollTrigger.matchMedia({
+    "(prefers-reduced-motion: no-preference)": function () {
+      const desktop = window.matchMedia("(min-width: 1281px)").matches;
+      const mobile = window.matchMedia("(max-width: 768px)").matches;
+      const panDistance = desktop ? -30 : mobile ? -14 : -22;
+      const backgroundOverscan = desktop ? 1.3 : mobile ? 1.5 : 1.4;
+      const backgroundLeftFocus = -50 / backgroundOverscan;
+      const backgroundRightFocus = 50 / backgroundOverscan - 100;
+      const initialBackgroundWidth = () => transition.clientWidth * 0.8;
+      const initialBackgroundHeight = () => transition.clientHeight * 0.6;
+      const pixelsPerUnit = () => {
+        if (desktop) return Math.max(window.innerHeight * 0.55, 520);
+        if (mobile) return Math.max(window.innerHeight * 0.24, 180);
+        return Math.max(window.innerHeight * 0.4, 320);
+      };
+
+      let masterTimeline;
+      masterTimeline = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          id: "sec2-sec5-master",
+          trigger: transition,
+          start: "top top",
+          end: () =>
+            `+=${Math.round(masterTimeline.duration() * pixelsPerUnit())}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: mobile ? 0.8 : 1.2,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      gsap.set(backgroundLayer, {
+        autoAlpha: 1,
+        width: initialBackgroundWidth,
+        height: initialBackgroundHeight,
+        borderRadius: "1.2rem",
+      });
+      gsap.set(backgroundImage, {
+        xPercent: -50,
+        yPercent: 0,
+        filter: "brightness(1)",
+        force3D: true,
+      });
+      gsap.set(sec2Panel, { autoAlpha: 1 });
+      gsap.set(horizontalTrack, { autoAlpha: 0, pointerEvents: "none" });
+      gsap.set([sec3Text, sec3Cards], { autoAlpha: 0, y: 40 });
+      gsap.set(sec4Panel, {
+        xPercent: desktop ? -100 : 0,
+        pointerEvents: "none",
+      });
+      gsap.set(sec4Text, { opacity: 0 });
+      gsap.set(sec4Cards, { xPercent: desktop ? 100 : 0 });
+      gsap.set(sec4Circles, {
+        opacity: 0,
+        xPercent: desktop ? 0 : 70,
+      });
+      gsap.set(sec5Panel, {
+        yPercent: 100,
+        xPercent: -50,
+        left: "50%",
+        right: "auto",
+        width: "50%",
+        borderRadius: "1.6rem",
+        overflow: "hidden",
+      });
+      gsap.set(sec5Background, { filter: "brightness(0.7)" });
+      gsap.set(sec5Top, {
+        alignItems: "center",
+        x: () => {
+          const containerStyle = getComputedStyle(sec5TextContainer);
+          const innerWidth =
+            sec5TextContainer.clientWidth -
+            (parseFloat(containerStyle.paddingLeft) || 0) -
+            (parseFloat(containerStyle.paddingRight) || 0);
+
+          return Math.max(0, (innerWidth - sec5Top.offsetWidth) / 2);
+        },
+        y: () =>
+          (sec5Bottom.offsetHeight +
+            (parseFloat(getComputedStyle(sec5TextContainer).gap) || 0)) /
+          2,
+      });
+      gsap.set(sec5TopChildren, { x: 0 });
+      gsap.set(sec5TopSpans, { textAlign: "center" });
+      gsap.set(sec5Items, { opacity: 0 });
+      gsap.set(sec5Bottom, { pointerEvents: "none" });
+
+      masterTimeline
+        .to(backgroundLayer, {
+          width: () => transition.clientWidth,
+          height: () => transition.clientHeight,
+          borderRadius: "0%",
+          duration: mobile ? 1.8 : 2.5,
+        })
+        .fromTo(".t1", { opacity: 0 }, { opacity: 1, duration: 3 })
+        .to(".t1", { opacity: 0, duration: 0 })
+        .fromTo(".t2", { opacity: 0 }, { opacity: 1, duration: 3 })
+        .to(".t2", { opacity: 0, duration: 0 })
+        .fromTo(".t3", { opacity: 0 }, { opacity: 1, duration: 3 })
+        .to(".t3", { opacity: 0, duration: 0 })
+        .fromTo(".t4", { opacity: 0 }, { opacity: 1, duration: 3 })
+        .to(".t4", { opacity: 0, duration: 0 })
+        .fromTo(".t5", { opacity: 0 }, { opacity: 1, duration: 3 })
+        .to({}, { duration: 0.65 })
+        .set(horizontalTrack, { autoAlpha: 1 })
+        .to(sec2Panel, { autoAlpha: 0, duration: 0.45 })
+        .to(
+          backgroundImage,
+          {
+            xPercent: backgroundLeftFocus,
+            yPercent: panDistance,
+            filter: "brightness(0.2)",
+            duration: mobile ? 2.2 : 3.2,
+            force3D: true,
+          },
+          "<",
+        )
+        .fromTo(
+          [sec3Text, sec3Cards],
+          { autoAlpha: 0, y: 40 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 1.1,
+            stagger: 0.08,
+            immediateRender: false,
+          },
+          mobile ? ">-0.85" : ">-1.2",
+        )
+        .set(horizontalTrack, { pointerEvents: "auto" })
+        .to({}, { duration: 0.5 });
+
+      if (desktop) {
+        masterTimeline
+          .to(
+            [sec3Text, sec3Cards],
+            { opacity: 0, duration: 0.32, stagger: 0.04 },
+            ">",
+          )
+          .to(backgroundImage, {
+            xPercent: backgroundRightFocus,
+            duration: 1.65,
+            ease: "power1.inOut",
+            force3D: true,
+          })
+          .to(sec4Cards, { xPercent: 0, duration: 1 }, "<0.72")
+          .to(
+            sec4Circles,
+            { opacity: 1, duration: 0.55, stagger: 0.15 },
+            "<0.15",
+          )
+          .to(sec4Text, { opacity: 1, duration: 0.35 }, "<0.24")
+          .set(sec4Panel, { pointerEvents: "auto" });
+      } else {
+        masterTimeline
+          .to(
+            [sec3Text, sec3Cards],
+            { opacity: 0, duration: 0.32, stagger: 0.04 },
+            ">",
+          )
+          .to(backgroundImage, {
+            xPercent: backgroundRightFocus,
+            duration: 1.45,
+            ease: "power1.inOut",
+            force3D: true,
+          })
+          .to(
+            sec4Circles,
+            {
+              opacity: 1,
+              xPercent: 0,
+              duration: 0.5,
+              stagger: 0.12,
+            },
+            "<0.62",
+          )
+          .to(sec4Text, { opacity: 1, duration: 0.35 }, "<0.2")
+          .set(sec4Panel, { pointerEvents: "auto" });
+      }
+
+      masterTimeline
+        .to({}, { duration: 0.28 })
+        .set(sec4Panel, { pointerEvents: "none" })
+        .to(sec5Panel, {
+          yPercent: 0,
+          width: "100%",
+          borderRadius: "0%",
+          duration: 1,
+        })
+        .set(backgroundLayer, { visibility: "hidden" })
+        .to(
+          [sec3Panel, sec4Panel],
+          { filter: "blur(10px)", duration: 0.82 },
+          "<",
+        )
+        .to([sec3Panel, sec4Panel], { opacity: 0, duration: 0.38 }, "<0.42")
+        .to({}, { duration: 0.18 })
+        .to(sec5Background, {
+          filter: "brightness(0.3)",
+          duration: 0.9,
+        })
+        .to(sec5Top, { x: 0, y: 0, duration: 0.9 }, "<")
+        .to(
+          sec5TopChildren,
+          {
+            x: (index, element) =>
+              -Math.max(0, (sec5Top.offsetWidth - element.offsetWidth) / 2),
+            duration: 0.9,
+          },
+          "<",
+        )
+        .set(sec5Top, { alignItems: "flex-start" })
+        .set(sec5TopSpans, { textAlign: "left" }, "<")
+        .set(sec5TopChildren, { x: 0 }, "<")
+        .set(sec5Bottom, { pointerEvents: "auto" })
+        .to(sec5Items, { opacity: 1, duration: 0.55, stagger: 0.12 }, "<0.2")
+        .to({}, { duration: 0.35 });
+
+      return () => {
+        masterTimeline.scrollTrigger?.kill();
+        masterTimeline.kill();
+      };
+    },
+    "(prefers-reduced-motion: reduce)": function () {
+      gsap.set(backgroundImage, { clearProps: "transform" });
+      gsap.set(sec2Panel, { display: "none" });
+      gsap.set(horizontalTrack, {
+        autoAlpha: 1,
+        pointerEvents: "auto",
+      });
+      gsap.set([sec3Text, sec3Cards], {
+        autoAlpha: 1,
+        y: 0,
+      });
+    },
+  });
+
+  headerChangeOnSection__init();
+  ScrollTrigger.refresh();
+}
+
 // GSAP scrollLeins ------------------------------ //
 function scrollLeins__init() {
   const lenis = new Lenis({
@@ -775,19 +1109,9 @@ function itemsSwiper__Init() {
       0: {
         slidesPerView: 1,
         centeredSlides: true,
-        spaceBetween: 60,
+        spaceBetween: 0,
       },
-      450: {
-        slidesPerView: 2,
-        centeredSlides: true,
-        spaceBetween: 20,
-      },
-      768: {
-        slidesPerView: 3,
-        centeredSlides: true,
-        spaceBetween: 60,
-      },
-      1024: {
+      1280: {
         slidesPerView: 3,
         centeredSlides: true,
         spaceBetween: 10,
