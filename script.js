@@ -509,7 +509,6 @@ function scrollTriggerLegacy__unused() {
         gsap.set(sec4Cards, { xPercent: 100 });
         gsap.set(sec4Circles, { opacity: 0 });
         gsap.set(sec5Panel, { yPercent: 100 });
-        gsap.set(sec5Background, { filter: "brightness(0.7)" });
         gsap.set(sec5Top, {
           y: () =>
             (sec5Bottom.offsetHeight +
@@ -549,11 +548,6 @@ function scrollTriggerLegacy__unused() {
             "<0.42",
           )
           .to({}, { duration: 0.18 })
-          .to(sec5Background, {
-            filter: "brightness(0.3)",
-            duration: 0.9,
-            ease: "none",
-          })
           .to(sec5Top, { y: 0, duration: 0.9, ease: "none" }, "<")
           .set(sec5Bottom, { pointerEvents: "auto" })
           .to(
@@ -610,7 +604,6 @@ function scrollTriggerLegacy__unused() {
         gsap.set(sec4Text, { opacity: 0 });
         gsap.set(sec4Circles, { opacity: 0, xPercent: 70 });
         gsap.set(sec5Panel, { yPercent: 100 });
-        gsap.set(sec5Background, { filter: "brightness(0.7)" });
         gsap.set(sec5Top, {
           y: () =>
             (sec5Bottom.offsetHeight +
@@ -664,11 +657,6 @@ function scrollTriggerLegacy__unused() {
             "<0.42",
           )
           .to({}, { duration: 0.18 })
-          .to(sec5Background, {
-            filter: "brightness(0.3)",
-            duration: 0.9,
-            ease: "none",
-          })
           .to(sec5Top, { y: 0, duration: 0.9, ease: "none" }, "<")
           .set(sec5Bottom, { pointerEvents: "auto" })
           .to(
@@ -793,7 +781,6 @@ function scrollTrigger__init() {
         borderRadius: "1.6rem",
         overflow: "hidden",
       });
-      gsap.set(sec5Background, { filter: "brightness(0.7)" });
       gsap.set(sec5Top, {
         alignItems: "center",
         x: () => {
@@ -925,10 +912,6 @@ function scrollTrigger__init() {
         )
         .to([sec3Panel, sec4Panel], { opacity: 0, duration: 0.38 }, "<0.42")
         .to({}, { duration: 0.18 })
-        .to(sec5Background, {
-          filter: "brightness(0.3)",
-          duration: 0.9,
-        })
         .to(sec5Top, { x: 0, y: 0, duration: 0.9 }, "<")
         .to(
           sec5TopChildren,

@@ -1745,8 +1745,6 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   height: 100%;
   min-height: var(--minHeight--block-system);
   object-fit: var(--object-cover);
-  filter: brightness(0.7);
-  will-change: filter;
 }
 
 .sec-3-4-horizontal > .sec-5 > .text-container {
@@ -1806,7 +1804,8 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 }
 
 .sec-3-4-horizontal > .sec-5 > .text-container > .bottom-box > .value-wrap {
-  width: 100%;
+  flex: 1 1 0;
+  width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1815,16 +1814,21 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   padding: 4.8rem 4.8rem;
   border-right: 0.1rem solid var(--color-white);
   border-left: 0.1rem solid var(--color-white);
-  transition: all 0.3s ease;
+  transition:
+    flex-grow 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    flex-basis 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    backdrop-filter 0.3s ease;
 }
 
 .sec-3-4-horizontal
   > .sec-5
   > .text-container
   > .bottom-box
-  > .value-wrap:hover {
+  > .value-wrap:is(:hover, :focus-within) {
+  flex-grow: 1.16;
+  flex-basis: 2.4rem;
   backdrop-filter: blur(15px);
-  /* transform: translateY(-10%); */
 }
 
 .sec-3-4-horizontal
@@ -2972,6 +2976,7 @@ footer
   }
 
   .sec-3-4-horizontal > .sec-5 > .text-container > .bottom-box > .value-wrap {
+    flex: 0 0 auto;
     width: 100%;
     min-height: clamp(9rem, 15dvh, 12rem);
     padding: 4rem 0;
@@ -2989,8 +2994,10 @@ footer
     > .sec-5
     > .text-container
     > .bottom-box
-    > .value-wrap:hover {
-    transform: none;
+    > .value-wrap:is(:hover, :focus-within) {
+    flex-basis: auto;
+    min-height: clamp(10.2rem, 17dvh, 13.6rem);
+    padding-block: 4.8rem;
   }
 
   .sec-3-4-horizontal
@@ -3059,6 +3066,12 @@ footer
     > a {
     width: 3.2rem;
     height: 3.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-3-4-horizontal > .sec-5 > .text-container > .bottom-box > .value-wrap {
+    transition: backdrop-filter 0.3s ease;
   }
 }
 
