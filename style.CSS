@@ -994,7 +994,8 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   position: absolute;
   top: 0;
   left: 50%;
-  width: 130%;
+  width: 130vw;
+  min-width: 130vw;
   height: 145%;
   max-width: none;
   object-fit: cover;
@@ -1082,14 +1083,16 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 
 @media screen and (max-width: 1280px) {
   .sec-2-4-bg > img {
-    width: 140%;
+    width: 140vw;
+    min-width: 140vw;
     height: 135%;
   }
 }
 
 @media screen and (max-width: 768px) {
   .sec-2-4-bg > img {
-    width: 150%;
+    width: 150vw;
+    min-width: 150vw;
     height: 125%;
   }
 }
