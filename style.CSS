@@ -219,7 +219,7 @@ header {
 }
 
 header.peek {
-  transform: translateY(calc(-100% + max(1.6rem, 12px)));
+  transform: translateY(-92.5%);
 }
 
 header.peek > .hd-container {

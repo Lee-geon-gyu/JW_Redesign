@@ -49,10 +49,8 @@ function sectionAosSequence__init() {
   ];
 
   sectionGroups.forEach((selectors, groupIndex) => {
-    // Sec-3 has a dedicated ScrollTrigger reveal synced to the Sec-2 exit.
     if (groupIndex === 0) return;
 
-    // sec-5는 고정 스크롤 타임라인에서 별도로 연출한다.
     if (groupIndex === 2) return;
 
     const elements = selectors.flatMap((selector) => [
