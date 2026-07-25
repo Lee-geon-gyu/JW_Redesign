@@ -1000,45 +1000,62 @@ function scrollLeins__init() {
     });
   });
 }
-// headerHide ------------------------------ //
-function headerHide__init() {
-  (function () {
-    const header = document.querySelector("header");
-    if (!header) return;
+// header scroll progress ------------------------------ //
+function headerProgress__init() {
+  const progressBar = document.querySelector(
+    "header > .header-progress > .header-progress-bar",
+  );
+  const header = document.querySelector("header");
+  const sec6 = document.querySelector(".sec-6");
+  if (!progressBar) return;
 
-    let lastY = window.scrollY || window.pageYOffset;
-    let ticking = false;
+  let ticking = false;
+  let lastScrollY = window.scrollY || window.pageYOffset;
 
-    function onScroll() {
-      const currentY = window.scrollY || window.pageYOffset;
+  function updateProgress() {
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const scrollableHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const progress =
+      scrollableHeight > 0
+        ? Math.min(Math.max(scrollTop / scrollableHeight, 0), 1)
+        : 0;
 
-      if (currentY > lastY) {
-        header.classList.add("hide");
-        header.classList.remove("show");
-      } else if (currentY < lastY) {
-        header.classList.add("show");
-        header.classList.remove("hide");
-      }
-      lastY = currentY;
-      ticking = false;
+    progressBar.style.transform = `scaleX(${progress})`;
+
+    if (header && sec6) {
+      const sec6Reached =
+        sec6.getBoundingClientRect().top <=
+        header.getBoundingClientRect().bottom;
+      progressBar.classList.toggle("is-blue", sec6Reached);
     }
 
-    window.addEventListener(
-      "scroll",
-      function () {
-        if (!ticking) {
-          window.requestAnimationFrame(onScroll);
-          ticking = true;
-        }
-      },
-      { passive: true },
-    );
+    if (header) {
+      const scrollDelta = scrollTop - lastScrollY;
 
-    window.addEventListener("load", function () {
-      lastY = window.scrollY || window.pageYOffset;
-      header.classList.add(lastY === 0 ? "show" : "hide");
-    });
-  })();
+      if (scrollTop <= 0) {
+        header.classList.remove("peek");
+      } else if (scrollDelta > 3) {
+        header.classList.add("peek");
+      } else if (scrollDelta < -3) {
+        header.classList.remove("peek");
+      }
+    }
+
+    lastScrollY = scrollTop;
+    ticking = false;
+  }
+
+  function requestProgressUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateProgress);
+  }
+
+  window.addEventListener("scroll", requestProgressUpdate, { passive: true });
+  window.addEventListener("resize", requestProgressUpdate);
+  window.addEventListener("load", requestProgressUpdate);
+  requestProgressUpdate();
 }
 // marqueeSlide ------------------------------ //
 function marqueeSlide__init() {
@@ -1188,7 +1205,7 @@ swiperCustom__init();
 bottomSelectboxDropUp__init();
 scrollTrigger__init();
 scrollLeins__init();
-headerHide__init();
+headerProgress__init();
 marqueeSlide__init();
 itemsSwiper__Init();
 searchBoxOptions__init();

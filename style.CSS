@@ -66,6 +66,13 @@ a {
 
 html {
   font-size: max(6px, 0.52083333vw);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 html body {
@@ -89,7 +96,7 @@ img {
 :root {
   --margin-grid-system: 0 14rem;
   --maxWidth-grid-system: 164rem;
-  --minWidth-block-system: 344px;
+  --minWidth-block-system: 450px;
   --minHeight--block-system: 100dvh;
   --primary-color: rgba(0, 117, 197, 1);
   --main-color-white: rgba(248, 249, 250, 1);
@@ -207,20 +214,42 @@ header {
   background-color: rgba(0, 117, 197, 0.2);
   z-index: 100;
   backdrop-filter: blur(10px);
+  transform: translateY(0);
+  transition: transform 0.4s ease;
 }
 
-header.hide {
-  transform: translateY(-100%);
+header.peek {
+  transform: translateY(calc(-100% + max(1.6rem, 12px)));
+}
+
+header.peek > .hd-container {
   opacity: 0;
   visibility: hidden;
-  transition: all 0.6s ease;
 }
 
-header.show {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-  transition: all 0.6s ease;
+header > .header-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.4rem;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+header > .header-progress > .header-progress-bar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-white);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+  transition: background-color 0.3s ease;
+}
+
+header > .header-progress > .header-progress-bar.is-blue {
+  background-color: var(--primary-color);
 }
 
 header.on-sec-w {
@@ -234,6 +263,9 @@ header > .hd-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
 }
 /* header > logo-box --------------------------------------------------------------- */
 header > .hd-container > .hd-logo-box {
@@ -631,6 +663,10 @@ main {
   position: relative;
 }
 
+section {
+  min-width: var(--minWidth-block-system);
+}
+
 .section {
   background-color: var(--main-color-gray);
 }
@@ -1010,7 +1046,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
-  font-size: clamp(6.4rem, 4.5vw, 72px);
+  font-size: clamp(5.8rem, 3.5vw, 72px);
   color: var(--main-color-white);
   font-weight: 700;
   text-align: center;
@@ -1101,7 +1137,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 }
 
 .sec-3-4-horizontal > .sec-3 > .left-box > span:nth-child(3) {
-  font-size: clamp(calc(16px / 1.5), 1vw, 16px);
+  font-size: clamp(14px, 1.25vw, 20px);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -1168,8 +1204,8 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 }
 
 .sec-3-4-horizontal > .sec-3 > .right-box > .produce-box {
-  width: clamp(calc(400px / 3.5), 25vw, 40rem);
-  height: clamp(calc(400px / 3), 25vw, 40rem);
+  width: clamp(calc(400px / 2.5), 25vw, 40rem);
+  height: clamp(calc(350px / 2), 30vw, 40rem);
   border-radius: 2.4rem;
   margin: 2.4rem;
   background-color: rgba(51, 51, 51, 0.1);
@@ -1297,7 +1333,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 }
 
 .sec-3-4-horizontal > .sec-4 > .top-box > span:nth-child(3) {
-  font-size: clamp(calc(16px / 1.5), 1vw, 16px);
+  font-size: clamp(14px, 1.25vw, 20px);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -1503,7 +1539,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .flip-card
   > .flip-card-front
   > span:first-child {
-  font-size: 3.2rem;
+  font-size: clamp(22px, 1.75vw, 32px);
   font-weight: 600;
 }
 
@@ -1514,7 +1550,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .flip-card
   > .flip-card-front
   > span:last-child {
-  font-size: 2.6rem;
+  font-size: clamp(20px, 1.5vw, 28px);
   font-weight: 500;
 }
 
@@ -1525,7 +1561,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .flip-card
   > .flip-card-back
   > p {
-  font-size: clamp(calc(1.6rem / 1.2), 1vw, 20px);
+  font-size: clamp(18px, 1.25vw, 22px);
   font-weight: 600;
   line-height: 2;
 }
@@ -1757,7 +1793,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
 }
 
 .sec-3-4-horizontal > .sec-5 > .text-container > .top-box > span:nth-child(3) {
-  font-size: clamp(12px, 1vw, 16px);
+  font-size: clamp(14px, 1.25vw, 20px);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -1812,7 +1848,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .left-box
   > span:nth-child(1) {
   font-weight: 600;
-  font-size: clamp(2.4rem, 1.5vw, 38px);
+  font-size: clamp(24px, 2vw, 38px);
 }
 
 .sec-3-4-horizontal
@@ -1823,7 +1859,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .left-box
   > span:nth-child(2) {
   font-weight: 400;
-  font-size: clamp(1.8rem, 1vw, 24px);
+  font-size: clamp(16px, 1.5vw, 24px);
 }
 
 .sec-3-4-horizontal
@@ -1834,7 +1870,7 @@ main > .sec-1 > .text-container > .custom-pagination > .current,
   > .center-box {
   width: 100%;
   font-weight: 400;
-  font-size: clamp(1.8rem, 1.25vw, 20px);
+  font-size: clamp(18px, 1.45vw, 22px);
   line-height: 1.5;
   text-align: left;
   display: flex;
@@ -1901,7 +1937,7 @@ main > .sec-6 {
   align-items: center;
   justify-content: center;
   gap: 9.6rem;
-  padding: 18rem 0 0 0;
+  padding: 18rem 0;
   background-color: var(--main-color-white);
   cursor: default;
 }
@@ -2076,7 +2112,7 @@ main > .sec-6 > .top-box > .search-wrap img {
   width: 100vw;
   max-width: 1920px;
   color: var(--main-color-gray);
-  padding: 0;
+  padding: 1.2rem 0;
   margin-inline: calc(50% - 50vw);
   box-sizing: border-box;
 }
@@ -2201,6 +2237,10 @@ main > .sec-6 > .top-box > .search-wrap img {
     height: 280px;
     padding: 32px 36px;
   }
+
+  .goods-slider .swiper-wrapper .swiper-slide-active:hover {
+    transform: scale(1) translateY(-2.5%);
+  }
 }
 /* main > sec-7 --------------------------------------------------------------- */
 main > .sec-7 {
@@ -2239,7 +2279,7 @@ main > .sec-7 > .top-box > h4 {
 }
 
 main > .sec-7 > .top-box > span:nth-child(3) {
-  font-size: clamp(12px, 1vw, 16px);
+  font-size: clamp(14px, 1.25vw, 20px);
   font-weight: 500;
   line-height: 1.6;
 }
@@ -2394,7 +2434,7 @@ main
   > .text-container
   > .text-bottom {
   font-weight: 600;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: rgba(161, 161, 162, 0.8);
 }
 /* main > banner --------------------------------------------------------------- */
@@ -2709,7 +2749,7 @@ footer
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  font-size: 1.4rem;
+  font-size: 1.8rem;
 }
 
 footer
@@ -2914,7 +2954,7 @@ footer
 }
 
 /* sec-5 mobile horizontal list --------------------------------------------- */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .sec-3-4-horizontal > .sec-5 > .text-container {
     min-height: 0;
     padding: clamp(2.4rem, 4dvh, 4rem) 2.4rem;
@@ -2925,44 +2965,23 @@ footer
     gap: 1.2rem;
   }
 
-  .sec-3-4-horizontal
-    > .sec-5
-    > .text-container
-    > .top-box
-    > span:nth-child(1) {
-    font-size: 1.2rem;
-  }
-
-  .sec-3-4-horizontal > .sec-5 > .text-container > .top-box > h4 {
-    font-size: clamp(3.2rem, 7vw, 4.8rem);
-  }
-
-  .sec-3-4-horizontal
-    > .sec-5
-    > .text-container
-    > .top-box
-    > span:nth-child(3) {
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
-
   .sec-3-4-horizontal > .sec-5 > .text-container > .bottom-box {
     width: 100%;
     padding: 0;
     flex-direction: column;
-    border-top: 0;
   }
 
   .sec-3-4-horizontal > .sec-5 > .text-container > .bottom-box > .value-wrap {
     width: 100%;
     min-height: clamp(9rem, 15dvh, 12rem);
-    padding: 2rem 0;
+    padding: 4rem 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 1.6rem;
     border: 0;
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.45);
     border-bottom: 0.1rem solid rgba(255, 255, 255, 0.45);
   }
 
@@ -2992,7 +3011,7 @@ footer
     > .value-wrap
     > .left-box
     > span:nth-child(1) {
-    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    font-size: clamp(2rem, 2.75vw, 2.6rem);
   }
 
   .sec-3-4-horizontal
@@ -3002,7 +3021,7 @@ footer
     > .value-wrap
     > .left-box
     > span:nth-child(2) {
-    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
   }
 
   .sec-3-4-horizontal
@@ -3015,7 +3034,7 @@ footer
     flex: 1 1 auto;
     width: auto;
     padding: 0;
-    font-size: clamp(1.1rem, 2.1vw, 1.4rem);
+    font-size: clamp(1.6rem, 2.25vw, 2rem);
     line-height: 1.5;
     white-space: normal;
   }
@@ -3346,7 +3365,7 @@ footer
   > .flip-card
   > .flip-card-front
   > span:first-child {
-  font-size: clamp(1.8rem, 1.65vw, 3.2rem);
+  font-size: clamp(2.6rem, 1.75vw, 32px);
   font-weight: 600;
   line-height: 1.3;
 }
@@ -3359,7 +3378,7 @@ footer
   > .flip-card-front
   > span:last-child {
   margin-top: 0.8rem;
-  font-size: clamp(1.3rem, 1.25vw, 2.6rem);
+  font-size: clamp(2.4rem, 1.5vw, 28px);
   font-weight: 500;
   line-height: 1.3;
 }
@@ -3371,7 +3390,7 @@ footer
   > .flip-card
   > .flip-card-back
   > p {
-  font-size: clamp(1.1rem, 0.85vw, 1.6rem);
+  font-size: clamp(1.6rem, 1.25vw, 22px);
   font-weight: 600;
   line-height: 1.7;
 }
@@ -3512,6 +3531,7 @@ footer
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1.8rem, 4vw, 3.2rem);
     pointer-events: auto;
+    transform: translateY(-3dvh);
   }
 
   .sec-3-4-horizontal > .sec-4 > .bottom-box > .circles {
@@ -3522,5 +3542,35 @@ footer
 
   .sec-3-4-horizontal > .sec-4 > .bottom-box > .circles:nth-child(3) {
     grid-column: 1 / -1;
+  }
+
+  .sec-3-4-horizontal > .sec-4 > .bottom-box > .circles:hover > .flip-card {
+    transform: rotateY(0deg) scale(1) !important;
+    border-radius: 50% !important;
+    cursor: default;
+  }
+
+  .sec-3-4-horizontal
+    > .sec-4
+    > .bottom-box
+    > .circles:hover
+    > .flip-card
+    > .flip-card-front {
+    opacity: 1;
+    visibility: visible;
+    border-radius: 50% !important;
+  }
+
+  .sec-3-4-horizontal
+    > .sec-4
+    > .bottom-box
+    > .circles:hover
+    > .flip-card
+    > .flip-card-back {
+    opacity: 0;
+    visibility: hidden;
+    border-radius: 50% !important;
+    background-color: transparent;
+    box-shadow: none;
   }
 }
