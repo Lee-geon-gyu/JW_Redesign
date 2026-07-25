@@ -211,7 +211,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 117, 197, 0.2);
+  background-color: rgba(145, 184, 255, 0.2);
   z-index: 100;
   backdrop-filter: blur(10px);
   transform: translateY(0);
