@@ -2,6 +2,26 @@ console.clear();
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Reload immediately whenever the responsive viewport changes by at least 1px.
+function responsiveReload__init() {
+  const initialWidth = window.innerWidth;
+  const initialHeight = window.innerHeight;
+  let reloading = false;
+
+  window.addEventListener("resize", () => {
+    if (
+      reloading ||
+      (window.innerWidth === initialWidth &&
+        window.innerHeight === initialHeight)
+    ) {
+      return;
+    }
+
+    reloading = true;
+    window.location.reload();
+  });
+}
+
 // Section text and action reveal sequence ------------------------------ //
 function sectionAosSequence__init() {
   const sectionGroups = [
@@ -752,6 +772,11 @@ function scrollTrigger__init() {
         borderRadius: "1.2rem",
       });
       gsap.set(backgroundImage, {
+        // Reset the pixel translation parsed from the CSS translate3d().
+        // Without this, GSAP can combine it with xPercent and shift half of
+        // the shared background outside the viewport at responsive widths.
+        x: 0,
+        y: 0,
         xPercent: -50,
         yPercent: 0,
         filter: "brightness(1)",
@@ -852,6 +877,7 @@ function scrollTrigger__init() {
             { opacity: 0, duration: 0.32, stagger: 0.04 },
             ">",
           )
+          .set(sec4Panel, { pointerEvents: "auto" })
           .to(backgroundImage, {
             xPercent: backgroundRightFocus,
             duration: 1.65,
@@ -873,6 +899,7 @@ function scrollTrigger__init() {
             { opacity: 0, duration: 0.32, stagger: 0.04 },
             ">",
           )
+          .set(sec4Panel, { pointerEvents: "auto" })
           .to(backgroundImage, {
             xPercent: backgroundRightFocus,
             duration: 1.45,
@@ -1174,6 +1201,7 @@ function searchBoxOptions__init() {
   (el) => el.scrollWidth > document.documentElement.clientWidth,
 );
 // Functions Operate Key ------------------------------ //
+responsiveReload__init();
 sectionAosSequence__init();
 loadingPage__init();
 menuboxDropdown__init();
