@@ -2,6 +2,8 @@ console.clear();
 
 gsap.registerPlugin(ScrollTrigger);
 
+const RESPONSIVE_RELOAD_KEY = "jw-responsive-reload";
+
 // Reload immediately whenever the responsive viewport changes by at least 1px.
 function responsiveReload__init() {
   const initialWidth = window.innerWidth;
@@ -18,26 +20,312 @@ function responsiveReload__init() {
     }
 
     reloading = true;
+    sessionStorage.setItem(RESPONSIVE_RELOAD_KEY, "true");
     window.location.reload();
   });
 }
 
 // Section text and action reveal sequence ------------------------------ //
 function sectionAosSequence__init() {
+  const setupForwardAosReplay = (section, elements) => {
+    if (!section || !elements.length) return;
+
+    let forwardReplayReady = true;
+    let replayTicking = false;
+
+    const setAnimated = (isAnimated) => {
+      elements.forEach((element) =>
+        element.classList.toggle("aos-animate", isAnimated),
+      );
+    };
+
+    const replayForward = () => {
+      setAnimated(false);
+      window.requestAnimationFrame(() => {
+        setAnimated(false);
+        window.requestAnimationFrame(() => setAnimated(true));
+      });
+    };
+
+    const updateForwardReplay = () => {
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const visibleHeight = Math.max(
+        0,
+        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0),
+      );
+      const visibleRatio =
+        visibleHeight / Math.min(rect.height, viewportHeight);
+
+      if (rect.top >= viewportHeight * 0.8) {
+        forwardReplayReady = true;
+        setAnimated(false);
+      } else if (visibleRatio >= 0.4 && forwardReplayReady) {
+        forwardReplayReady = false;
+        replayForward();
+      }
+
+      replayTicking = false;
+    };
+
+    const requestForwardReplay = () => {
+      if (replayTicking) return;
+      replayTicking = true;
+      window.requestAnimationFrame(updateForwardReplay);
+    };
+
+    window.addEventListener("scroll", requestForwardReplay, { passive: true });
+    window.addEventListener("load", requestForwardReplay);
+    requestForwardReplay();
+  };
+
+  const sec2TriggerOffset = Math.round(window.innerHeight * 0.4);
+  const sec2TextElements = [
+    ".sec-2 > .left-box > span:nth-child(1)",
+    ".sec-2 > .left-box > h2",
+    ".sec-2 > .left-box > span:nth-child(3)",
+    ".sec-2 > .left-box > span:nth-child(4)",
+  ].flatMap((selector) => [...document.querySelectorAll(selector)]);
+
+  sec2TextElements.forEach((element, index) => {
+    element.dataset.aos = "fade-right";
+    element.dataset.aosDelay = String(index * 150);
+    element.dataset.aosDuration = "650";
+    element.dataset.aosAnchor = ".sec-2";
+    element.dataset.aosAnchorPlacement = "top-bottom";
+    element.dataset.aosOffset = String(sec2TriggerOffset);
+    element.dataset.aosOnce = "true";
+  });
+
+  const sec2CardWrapper = document.querySelector(".sec-2 > .right-box");
+
+  if (sec2CardWrapper) {
+    sec2CardWrapper.dataset.aos = "fade-up";
+    sec2CardWrapper.dataset.aosDelay = "600";
+    sec2CardWrapper.dataset.aosDuration = "650";
+    sec2CardWrapper.dataset.aosAnchor = ".sec-2";
+    sec2CardWrapper.dataset.aosAnchorPlacement = "top-bottom";
+    sec2CardWrapper.dataset.aosOffset = String(sec2TriggerOffset);
+    sec2CardWrapper.dataset.aosOnce = "true";
+  }
+
+  const sec2Section = document.querySelector(".sec-2");
+  const sec2AnimatedElements = [
+    ...sec2TextElements,
+    ...(sec2CardWrapper ? [sec2CardWrapper] : []),
+  ];
+
+  if (sec2Section && sec2AnimatedElements.length) {
+    let forwardReplayReady = true;
+    let replayTicking = false;
+
+    const setSec2Animated = (isAnimated) => {
+      sec2AnimatedElements.forEach((element) =>
+        element.classList.toggle("aos-animate", isAnimated),
+      );
+    };
+
+    const replaySec2Forward = () => {
+      setSec2Animated(false);
+      window.requestAnimationFrame(() => {
+        setSec2Animated(false);
+        window.requestAnimationFrame(() => setSec2Animated(true));
+      });
+    };
+
+    const updateSec2ForwardReplay = () => {
+      const rect = sec2Section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const visibleHeight = Math.max(
+        0,
+        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0),
+      );
+      const visibleRatio =
+        visibleHeight / Math.min(rect.height, viewportHeight);
+
+      // Reset only while sec-2 is below the viewport, toward sec-1.
+      if (rect.top >= viewportHeight * 0.8) {
+        forwardReplayReady = true;
+        setSec2Animated(false);
+      } else if (visibleRatio >= 0.4 && forwardReplayReady) {
+        forwardReplayReady = false;
+        replaySec2Forward();
+      }
+
+      replayTicking = false;
+    };
+
+    const requestSec2ForwardReplay = () => {
+      if (replayTicking) return;
+      replayTicking = true;
+      window.requestAnimationFrame(updateSec2ForwardReplay);
+    };
+
+    window.addEventListener("scroll", requestSec2ForwardReplay, {
+      passive: true,
+    });
+    window.addEventListener("load", requestSec2ForwardReplay);
+    requestSec2ForwardReplay();
+  }
+
+  const sec3TriggerOffset = Math.round(window.innerHeight * 0.4);
+  const sec3TextElements = [
+    ".sec-3 > .top-box > span:nth-child(1)",
+    ".sec-3 > .top-box > h4",
+    ".sec-3 > .top-box > span:nth-child(3)",
+  ].flatMap((selector) => [...document.querySelectorAll(selector)]);
+
+  sec3TextElements.forEach((element, index) => {
+    element.dataset.aos = "fade-up";
+    element.dataset.aosDelay = String(index * 150);
+    element.dataset.aosDuration = "650";
+    element.dataset.aosAnchor = ".sec-3";
+    element.dataset.aosAnchorPlacement = "top-bottom";
+    element.dataset.aosOffset = String(sec3TriggerOffset);
+    element.dataset.aosOnce = "true";
+  });
+
+  const sec3CardWrapper = document.querySelector(".sec-3 > .bottom-box");
+
+  if (sec3CardWrapper) {
+    sec3CardWrapper.dataset.aos = "fade-up";
+    sec3CardWrapper.dataset.aosDelay = "450";
+    sec3CardWrapper.dataset.aosDuration = "900";
+    sec3CardWrapper.dataset.aosAnchor = ".sec-3";
+    sec3CardWrapper.dataset.aosAnchorPlacement = "top-bottom";
+    sec3CardWrapper.dataset.aosOffset = String(sec3TriggerOffset);
+    sec3CardWrapper.dataset.aosOnce = "true";
+  }
+
+  const sec3Section = document.querySelector(".sec-3");
+  const sec3AnimatedElements = [
+    ...sec3TextElements,
+    ...(sec3CardWrapper ? [sec3CardWrapper] : []),
+  ];
+
+  if (sec3Section && sec3AnimatedElements.length) {
+    let forwardReplayReady = true;
+    let replayTicking = false;
+
+    const setSec3Animated = (isAnimated) => {
+      sec3AnimatedElements.forEach((element) =>
+        element.classList.toggle("aos-animate", isAnimated),
+      );
+    };
+
+    const replaySec3Forward = () => {
+      setSec3Animated(false);
+      window.requestAnimationFrame(() => {
+        setSec3Animated(false);
+        window.requestAnimationFrame(() => setSec3Animated(true));
+      });
+    };
+
+    const updateSec3ForwardReplay = () => {
+      const rect = sec3Section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const visibleHeight = Math.max(
+        0,
+        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0),
+      );
+      const visibleRatio =
+        visibleHeight / Math.min(rect.height, viewportHeight);
+
+      // Reset only while sec-3 is below the viewport, toward sec-2.
+      if (rect.top >= viewportHeight * 0.8) {
+        forwardReplayReady = true;
+        setSec3Animated(false);
+      } else if (visibleRatio >= 0.4 && forwardReplayReady) {
+        forwardReplayReady = false;
+        replaySec3Forward();
+      }
+
+      replayTicking = false;
+    };
+
+    const requestSec3ForwardReplay = () => {
+      if (replayTicking) return;
+      replayTicking = true;
+      window.requestAnimationFrame(updateSec3ForwardReplay);
+    };
+
+    window.addEventListener("scroll", requestSec3ForwardReplay, {
+      passive: true,
+    });
+    window.addEventListener("load", requestSec3ForwardReplay);
+    requestSec3ForwardReplay();
+  }
+
+  const sec6TextElements = [
+    ".sec-6 > .top-box > span",
+    ".sec-6 > .top-box > h4",
+    ".sec-6 > .top-box > p",
+  ].flatMap((selector) => [...document.querySelectorAll(selector)]);
+
+  sec6TextElements.forEach((element, index) => {
+    element.dataset.aos = "fade-up";
+    element.dataset.aosDelay = String(index * 150);
+    element.dataset.aosDuration = "650";
+    element.dataset.aosOffset = "160";
+    element.dataset.aosOnce = "true";
+  });
+
+  const sec6FilterPanel = document.querySelector(
+    ".sec-6 > .product-filter-panel",
+  );
+
+  if (sec6FilterPanel) {
+    sec6FilterPanel.dataset.aos = "fade-up";
+    sec6FilterPanel.dataset.aosDelay = "450";
+    sec6FilterPanel.dataset.aosDuration = "650";
+    sec6FilterPanel.dataset.aosOffset = "160";
+    sec6FilterPanel.dataset.aosOnce = "true";
+  }
+
+  const sec6ProductResults = document.querySelector(
+    ".sec-6 > .product-results",
+  );
+
+  if (sec6ProductResults) {
+    sec6ProductResults.dataset.aos = "fade-up";
+    sec6ProductResults.dataset.aosDelay = "600";
+    sec6ProductResults.dataset.aosDuration = "700";
+    sec6ProductResults.dataset.aosOffset = "160";
+    sec6ProductResults.dataset.aosOnce = "true";
+  }
+
+  const sec8TriggerOffset = Math.round(window.innerHeight * 0.4);
+  const sec8TextElements = [
+    ".sec-8 > .text-container > span:nth-child(1)",
+    ".sec-8 > .text-container > h2",
+    ".sec-8 > .text-container > span:nth-child(3)",
+    ".sec-8 > .text-container > .contact-cta",
+  ].flatMap((selector) => [...document.querySelectorAll(selector)]);
+
+  sec8TextElements.forEach((element, index) => {
+    element.dataset.aos = "fade-up";
+    element.dataset.aosDelay = String(index * 150);
+    element.dataset.aosDuration = "650";
+    element.dataset.aosAnchor = ".sec-8";
+    element.dataset.aosAnchorPlacement = "top-bottom";
+    element.dataset.aosOffset = String(sec8TriggerOffset);
+    element.dataset.aosOnce = "true";
+  });
+
   const sectionGroups = [
     [
-      ".sec-3 > .left-box > span:nth-child(1)",
-      ".sec-3 > .left-box > h2",
-      ".sec-3 > .left-box > span:nth-child(3)",
-      ".sec-3 > .left-box > span:nth-child(4)",
-      ".sec-3 > .right-box > .produce-box",
+      ".sec-2 > .left-box > span:nth-child(1)",
+      ".sec-2 > .left-box > h2",
+      ".sec-2 > .left-box > span:nth-child(3)",
+      ".sec-2 > .left-box > span:nth-child(4)",
+      ".sec-2 > .right-box > .produce-box",
     ],
     [
-      ".sec-4 > .top-box > span:nth-child(1)",
-      ".sec-4 > .top-box > h4",
-      ".sec-4 > .top-box > span:nth-child(3)",
-      ".sec-4 > .top-box > span:nth-child(4)",
-      ".sec-4 > .bottom-box > .circles",
+      ".sec-3 > .top-box > span:nth-child(1)",
+      ".sec-3 > .top-box > h4",
+      ".sec-3 > .top-box > span:nth-child(3)",
+      ".sec-3 > .top-box > span:nth-child(4)",
+      ".sec-3 > .bottom-box > .circles",
     ],
     [
       ".sec-5 > .text-container > .top-box > span:nth-child(1)",
@@ -69,7 +357,13 @@ function sectionAosSequence__init() {
   ];
 
   sectionGroups.forEach((selectors, groupIndex) => {
-    if (groupIndex === 0) return;
+    if (
+      groupIndex === 0 ||
+      groupIndex === 1 ||
+      groupIndex === 3 ||
+      groupIndex === 5
+    )
+      return;
 
     if (groupIndex === 2) return;
 
@@ -87,12 +381,24 @@ function sectionAosSequence__init() {
       // Lower content in sec-4 and sec-5 should start with its section,
       // instead of waiting until each individual item reaches the viewport.
       if (groupIndex === 1 || groupIndex === 2) {
-        element.dataset.aosAnchor = groupIndex === 1 ? ".sec-4" : ".sec-5";
+        element.dataset.aosAnchor = groupIndex === 1 ? ".sec-3" : ".sec-5";
         element.dataset.aosAnchorPlacement = "top-bottom";
         element.dataset.aosDelay = String(Math.min(index * 35, 175));
       }
     });
   });
+
+  setupForwardAosReplay(document.querySelector(".sec-6"), [
+    ...sec6TextElements,
+    ...(sec6FilterPanel ? [sec6FilterPanel] : []),
+    ...(sec6ProductResults ? [sec6ProductResults] : []),
+  ]);
+
+  setupForwardAosReplay(document.querySelector(".sec-7"), [
+    ...document.querySelectorAll(".sec-7 [data-aos]"),
+  ]);
+
+  setupForwardAosReplay(document.querySelector(".sec-8"), sec8TextElements);
 
   AOS.init({
     easing: "ease-out-cubic",
@@ -102,6 +408,22 @@ function sectionAosSequence__init() {
 
 // loadingPage ------------------------------ //
 function loadingPage__init() {
+  const isResponsiveReload =
+    sessionStorage.getItem(RESPONSIVE_RELOAD_KEY) === "true";
+
+  if (isResponsiveReload) {
+    sessionStorage.removeItem(RESPONSIVE_RELOAD_KEY);
+    history.scrollRestoration = "manual";
+    $(".loading-page").hide();
+    $("html, body").css({ overflow: "", height: "" });
+
+    const moveToFirstSection = () => window.scrollTo(0, 0);
+    moveToFirstSection();
+    window.requestAnimationFrame(moveToFirstSection);
+    window.addEventListener("load", moveToFirstSection, { once: true });
+    return;
+  }
+
   $("html, body").css({
     overflow: "hidden",
     height: "100%",
@@ -270,11 +592,25 @@ function tabAsideContainerClose__init() {
 }
 // swiperCustom ------------------------------ //
 function swiperCustom__init() {
+  const responsiveSwipeEnabled = window.matchMedia(
+    "(max-width: 1280px)",
+  ).matches;
+
   const mySwiper = new Swiper(".mySwiper", {
     loop: true,
-    speed: 600,
+    effect: "fade",
+    fadeEffect: {
+      crossFade: true,
+    },
+    speed: 1000,
+    allowTouchMove: responsiveSwipeEnabled,
+    simulateTouch: responsiveSwipeEnabled,
+    grabCursor: responsiveSwipeEnabled,
+    threshold: 8,
+    touchRatio: 1,
+    touchStartPreventDefault: true,
     autoplay: {
-      delay: 3500,
+      delay: 5000,
       disableOnInteraction: false,
     },
   });
@@ -293,13 +629,14 @@ function swiperCustom__init() {
 
     current.textContent = String(index).padStart(2, "0");
 
-    const percent = (index / totalSlides) * 100;
-    progress.style.width = percent + "%";
+    progress.classList.remove("is-running");
+    void progress.offsetWidth;
+    progress.classList.add("is-running");
   }
 
   updatePagination();
 
-  mySwiper.on("slideChangeTransitionStart", () => {
+  mySwiper.on("realIndexChange", () => {
     updatePagination();
   });
 
@@ -325,6 +662,11 @@ function swiperCustom__init() {
 // headerChangeOnSection ------------------------------ //
 function headerChangeOnSection__init() {
   const header = document.querySelector("header");
+  const removeDarkHeader = () => {
+    if (header.dataset.sec5Open !== "true") {
+      header.classList.remove("on-sec-w");
+    }
+  };
 
   ScrollTrigger.matchMedia({
     "(min-width: 1281px)": function () {
@@ -338,9 +680,9 @@ function headerChangeOnSection__init() {
           start: "top top",
           end: "bottom top",
           onEnter: () => header.classList.add("on-sec-w"),
-          onLeave: () => header.classList.remove("on-sec-w"),
+          onLeave: removeDarkHeader,
           onEnterBack: () => header.classList.add("on-sec-w"),
-          onLeaveBack: () => header.classList.remove("on-sec-w"),
+          onLeaveBack: removeDarkHeader,
         });
       });
     },
@@ -356,9 +698,9 @@ function headerChangeOnSection__init() {
           start: "top top",
           end: "bottom top",
           onEnter: () => header.classList.add("on-sec-w"),
-          onLeave: () => header.classList.remove("on-sec-w"),
+          onLeave: removeDarkHeader,
           onEnterBack: () => header.classList.add("on-sec-w"),
-          onLeaveBack: () => header.classList.remove("on-sec-w"),
+          onLeaveBack: removeDarkHeader,
         });
       });
     },
@@ -375,8 +717,8 @@ function bottomSelectboxDropUp__init() {
 function scrollTriggerLegacy__unused() {
   ScrollTrigger.getAll().forEach((st) => st.kill());
 
-  const sec2Background = document.querySelector(".sec-2 .bg-container > img");
-  const sec3Panel = document.querySelector(".sec-3-4-horizontal > .sec-3");
+  const sec2Background = document.querySelector(".sec-4 .bg-container > img");
+  const sec3Panel = document.querySelector(".sec-3-4-horizontal > .sec-2");
   const sec3Content = sec3Panel
     ? [
         sec3Panel.querySelector(":scope > .left-box"),
@@ -386,7 +728,7 @@ function scrollTriggerLegacy__unused() {
 
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".sec-2 > .content-wrap",
+      trigger: ".sec-4 > .content-wrap",
       start: "top top",
       end: "+=960%",
       pin: true,
@@ -397,7 +739,7 @@ function scrollTriggerLegacy__unused() {
   });
 
   tl.fromTo(
-    ".sec-2 .bg-container",
+    ".sec-4 .bg-container",
     {
       width: "90%",
       height: "70%",
@@ -412,7 +754,7 @@ function scrollTriggerLegacy__unused() {
     },
   )
     .fromTo(
-      ".sec-2 .bg-container > img",
+      ".sec-4 .bg-container > img",
       { filter: "brightness(1)" },
       { filter: "brightness(0.3)", duration: 2, ease: "none" },
       "<",
@@ -471,8 +813,8 @@ function scrollTriggerLegacy__unused() {
 
         if (!horizontalTrack) return;
 
-        const sec3Panel = horizontalTrack.querySelector(".sec-3");
-        const sec4Panel = horizontalTrack.querySelector(".sec-4");
+        const sec3Panel = horizontalTrack.querySelector(".sec-2");
+        const sec4Panel = horizontalTrack.querySelector(".sec-3");
         const sec5Panel = horizontalTrack.querySelector(".sec-5");
         const sec3Text = sec3Panel?.querySelector(":scope > .left-box");
         const sec3Cards = sec3Panel?.querySelector(":scope > .right-box");
@@ -581,8 +923,8 @@ function scrollTriggerLegacy__unused() {
 
         if (!responsiveTrack) return;
 
-        const sec3Panel = responsiveTrack.querySelector(".sec-3");
-        const sec4Panel = responsiveTrack.querySelector(".sec-4");
+        const sec3Panel = responsiveTrack.querySelector(".sec-2");
+        const sec4Panel = responsiveTrack.querySelector(".sec-3");
         const sec5Panel = responsiveTrack.querySelector(".sec-5");
         const sec3Text = sec3Panel?.querySelector(":scope > .left-box");
         const sec3Cards = sec3Panel?.querySelector(":scope > .right-box");
@@ -692,17 +1034,231 @@ function scrollTriggerLegacy__unused() {
 }
 // Unified Sec-2 -> Sec-3 transition and following panel sequence ------------ //
 function scrollTrigger__init() {
+  const header = document.querySelector("header");
+  const sloganSection = document.querySelector("main > .sec-4");
+  const sloganBackground = sloganSection?.querySelector(".sec-2-4-bg");
+  const sec5Section = document.querySelector("main > .sec-5");
+  const sloganTexts = sloganSection
+    ? [...sloganSection.querySelectorAll(".sec2-text")]
+    : [];
+
+  let flipStage = sloganSection?.querySelector(".sec-4-flip-stage");
+  let sec5Layer = sloganSection?.querySelector(".sec-5-transition-layer");
+  if (sloganSection && sloganBackground && sec5Section && !flipStage) {
+    flipStage = document.createElement("div");
+    flipStage.className = "sec-4-flip-stage";
+
+    const flipFront = document.createElement("div");
+    flipFront.className = "sec-4-flip-face sec-4-flip-front";
+
+    const flipBack = document.createElement("div");
+    flipBack.className = "sec-4-flip-face sec-4-flip-back";
+
+    const flipImage = document.createElement("div");
+    flipImage.className = "sec-5-flip-image";
+    flipImage.appendChild(
+      sec5Section.querySelector(".bg-container > img").cloneNode(true),
+    );
+
+    sec5Layer = document.createElement("div");
+    sec5Layer.className = "sec-5-transition-layer";
+    sec5Layer.appendChild(sec5Section);
+
+    flipFront.appendChild(sloganBackground);
+    flipBack.appendChild(flipImage);
+    flipStage.append(flipFront, flipBack);
+    sloganSection.prepend(sec5Layer);
+    sloganSection.prepend(flipStage);
+  }
+
+  const sec5PreviewBackground = sec5Layer?.querySelector(
+    ".sec-5 > .bg-container",
+  );
+  const sec5Content = sec5Layer?.querySelector(".sec-5 > .text-container");
+  const sec5RevealElements = sec5Content
+    ? [
+        sec5Content.querySelector(".top-box > span:nth-child(1)"),
+        sec5Content.querySelector(".top-box > h4"),
+        sec5Content.querySelector(".top-box > span:nth-child(3)"),
+        sec5Content.querySelector(".bottom-box"),
+      ].filter(Boolean)
+    : [];
+
+  if (sloganSection && sloganTexts.length) {
+    ScrollTrigger.matchMedia({
+      "(prefers-reduced-motion: no-preference)": function () {
+        gsap.set(sloganTexts, { autoAlpha: 0, y: 48 });
+        gsap.set(sec5Layer, { autoAlpha: 1, pointerEvents: "none" });
+        gsap.set(sec5Section, { backgroundColor: "rgba(255,255,255,0)" });
+        gsap.set(sec5PreviewBackground, { autoAlpha: 0 });
+        gsap.set(sec5Content, { autoAlpha: 1, y: 0 });
+        gsap.set(sec5RevealElements, { autoAlpha: 0, y: 32 });
+        gsap.set(sloganBackground, {
+          top: 0,
+          bottom: "auto",
+          left: 0,
+          width: "100%",
+          height: "100%",
+          minHeight: 0,
+          xPercent: 0,
+          yPercent: 0,
+          borderRadius: 0,
+        });
+        gsap.set(flipStage, {
+          top: "25dvh",
+          bottom: "auto",
+          left: "50%",
+          width: "50%",
+          height: "50dvh",
+          minHeight: 0,
+          xPercent: -50,
+          yPercent: 0,
+          borderRadius: "1.6rem",
+          rotationY: 0,
+        });
+
+        const sloganTimeline = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            id: "sec4-slogan-pin",
+            trigger: sloganSection,
+            start: "top top",
+            end: () => `+=${Math.round(window.innerHeight * 8.5)}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const imageArrivalTime =
+                sloganTimeline.labels["sec5-image-arrived"];
+              const imageHasArrived =
+                Number.isFinite(imageArrivalTime) &&
+                self.progress >= imageArrivalTime / sloganTimeline.duration();
+              const sec5IsOpen = self.progress >= 0.985;
+              if (header) {
+                header.dataset.sec5Open = String(imageHasArrived);
+              }
+
+              header?.classList.toggle("on-sec-w", imageHasArrived);
+
+              if (sec5Layer) {
+                sec5Layer.style.pointerEvents = sec5IsOpen ? "auto" : "none";
+                sec5Layer.style.zIndex = sec5IsOpen ? "20" : "0";
+              }
+            },
+          },
+        });
+
+        sloganTimeline.to(flipStage, {
+          top: 0,
+          width: "100%",
+          height: "100dvh",
+          borderRadius: 0,
+          duration: 1,
+        });
+
+        sloganTexts.forEach((text, index) => {
+          sloganTimeline
+            .to(text, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.32,
+              ease: "power2.out",
+            })
+            .to({}, { duration: 0.64 });
+
+          if (index < sloganTexts.length - 1) {
+            sloganTimeline.to(text, { autoAlpha: 0, duration: 0.18 });
+          }
+        });
+
+        sloganTimeline
+          .to(sloganTexts.at(-1), { autoAlpha: 0, duration: 0.18 })
+          .to(flipStage, {
+            top: "25dvh",
+            bottom: "auto",
+            width: "50%",
+            height: "50dvh",
+            yPercent: 0,
+            borderRadius: "1.6rem",
+            duration: 0.85,
+            ease: "power2.inOut",
+          })
+          .to(flipStage, {
+            rotationY: 180,
+            duration: 1,
+            ease: "power2.inOut",
+          })
+          .to(flipStage, {
+            top: () => sec5PreviewBackground.getBoundingClientRect().top,
+            left: () => sec5PreviewBackground.getBoundingClientRect().left,
+            width: () => sec5PreviewBackground.getBoundingClientRect().width,
+            height: () => sec5PreviewBackground.getBoundingClientRect().height,
+            xPercent: 0,
+            borderRadius: "1.4rem",
+            duration: 1.15,
+            ease: "power2.inOut",
+          })
+          .to(
+            sec5Section,
+            { backgroundColor: "#fff", duration: 1.15, ease: "power1.inOut" },
+            "<",
+          )
+          .addLabel("sec5-image-arrived")
+          .to(sec5PreviewBackground, { autoAlpha: 1, duration: 0.15 }, ">")
+          .set(flipStage, { autoAlpha: 0 })
+          .to(sec5RevealElements, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.55,
+            stagger: 0.18,
+            ease: "power2.out",
+          })
+          .set(sec5Layer, { zIndex: 20, pointerEvents: "auto" });
+
+        return () => {
+          sloganTimeline.scrollTrigger?.kill();
+          sloganTimeline.kill();
+        };
+      },
+      "(prefers-reduced-motion: reduce)": function () {
+        gsap.set(sec5Layer, { autoAlpha: 0 });
+        gsap.set(flipStage, {
+          top: 0,
+          bottom: "auto",
+          left: 0,
+          width: "100%",
+          height: "100%",
+          minHeight: 0,
+          xPercent: 0,
+          yPercent: 0,
+          borderRadius: 0,
+          rotationY: 0,
+        });
+        gsap.set(sloganTexts, { autoAlpha: 0, y: 0 });
+        gsap.set(sloganTexts.at(-1), { autoAlpha: 1, y: 0 });
+      },
+    });
+  }
+
+  // Sections 2–5 now live in the normal document flow. Keep the header
+  // observer, but do not build the former pinned, overlapping master timeline.
+  headerChangeOnSection__init();
+  ScrollTrigger.refresh();
+  return;
+
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 
   const transition = document.querySelector(".sec-2-4-transition");
   const backgroundLayer = transition?.querySelector(".sec-2-4-bg");
   const backgroundImage = backgroundLayer?.querySelector(":scope > img");
-  const sec2Panel = transition?.querySelector(":scope > .sec-2");
+  const sec2Panel = transition?.querySelector(":scope > .sec-4");
   const horizontalTrack = transition?.querySelector(
     ":scope > .sec-3-4-horizontal",
   );
-  const sec3Panel = horizontalTrack?.querySelector(":scope > .sec-3");
-  const sec4Panel = horizontalTrack?.querySelector(":scope > .sec-4");
+  const sec3Panel = horizontalTrack?.querySelector(":scope > .sec-2");
+  const sec4Panel = horizontalTrack?.querySelector(":scope > .sec-3");
   const sec5Panel = horizontalTrack?.querySelector(":scope > .sec-5");
 
   if (
@@ -1088,7 +1644,6 @@ function marqueeSlide__init() {
     originalItems.forEach((item) => {
       totalWidth += item.offsetWidth;
     });
-
     originalItems.forEach((item) => {
       const clone = item.cloneNode(true);
       clone.dataset.clone = "true";
@@ -1119,6 +1674,9 @@ function marqueeSlide__init() {
 }
 // itemsSwiper ------------------------------ //
 function itemsSwiper__Init() {
+  const swiperEl = document.querySelector(".goods-slider");
+  if (!swiperEl) return;
+
   const goodsSwiper = new Swiper(".goods-slider", {
     loop: true,
     centeredSlides: true,
@@ -1143,8 +1701,6 @@ function itemsSwiper__Init() {
       },
     },
   });
-
-  const swiperEl = document.querySelector(".goods-slider");
 
   swiperEl.addEventListener("mouseenter", () => {
     goodsSwiper.autoplay.stop();
@@ -1197,6 +1753,20 @@ function searchBoxOptions__init() {
   })();
 }
 
+// Product search filters ------------------------------ //
+function productFilters__init() {
+  document.querySelectorAll(".filter-options").forEach((group) => {
+    group.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+
+      group.querySelectorAll("button").forEach((item) => {
+        item.classList.toggle("active", item === button);
+      });
+    });
+  });
+}
+
 [...document.querySelectorAll("*")].filter(
   (el) => el.scrollWidth > document.documentElement.clientWidth,
 );
@@ -1218,6 +1788,7 @@ headerProgress__init();
 marqueeSlide__init();
 itemsSwiper__Init();
 searchBoxOptions__init();
+productFilters__init();
 // Recalculating Global Triggers Load ----------------------------- //
 window.addEventListener("load", () => {
   AOS.refreshHard();

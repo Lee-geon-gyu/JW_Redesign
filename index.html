@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      if (sessionStorage.getItem("jw-responsive-reload") === "true") {
+        document.documentElement.classList.add("is-responsive-reload");
+      }
+    </script>
     <title>JW중외제약 리디자인</title>
     <!-- Add on Font -->
     <link
@@ -293,22 +298,18 @@
       <section class="sec-1 section">
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
+            <div class="swiper-slide hero-slide--01">
               <img
                 src="Image_file/main-images/sec-1/sec-1-background-img(1).png"
                 alt="sec-1-background-image-1"
+                draggable="false"
               />
             </div>
-            <div class="swiper-slide">
+            <div class="swiper-slide hero-slide--02">
               <img
                 src="Image_file/main-images/sec-1/sec-1-background-img(2).png"
                 alt="sec-1-background-image-2"
-              />
-            </div>
-            <div class="swiper-slide">
-              <img
-                src="Image_file/main-images/sec-1/sec-1-background-img(3).png"
-                alt="sec-1-background-image-3"
+                draggable="false"
               />
             </div>
           </div>
@@ -347,25 +348,21 @@
             <span><i>We work for a healthy tomorrow,</i></span>
             <span><i>For our customers’ happy future.</i></span>
           </h3>
-          <div class="custom-pagination">
-            <span class="current">01</span>
-            <button class="prev-btn">
-              <img
-                src="Image_file/main-images/sec-1/prev-btn-img.png"
-                alt="prev-btn-img"
-              />
-            </button>
-            <div class="progress-bar">
-              <span class="progress"></span>
-            </div>
-            <button class="next-btn">
-              <img
-                src="Image_file/main-images/sec-1/next-btn-img.png"
-                alt="next-btn-img"
-              />
-            </button>
-            <span class="total">03</span>
-          </div>
+        </div>
+        <div class="scroll-guide" aria-hidden="true">
+          <span>SCROLL</span>
+          <i></i>
+        </div>
+        <div class="custom-pagination">
+          <button class="prev-btn" aria-label="Previous slide">
+            <img src="Image_file/main-images/sec-1/prev-btn-img.png" alt="" />
+          </button>
+          <span class="current">01</span>
+          <div class="progress-bar"><span class="progress"></span></div>
+          <span class="total">02</span>
+          <button class="next-btn" aria-label="Next slide">
+            <img src="Image_file/main-images/sec-1/next-btn-img.png" alt="" />
+          </button>
         </div>
       </section>
       <section class="sec-responsive">
@@ -385,292 +382,227 @@
           </div>
         </div>
       </section>
-      <div class="sec-2-4-transition">
+      <section class="sec-2 section">
+        <div class="left-box">
+          <span>Pipeline Overview</span>
+          <h2>기업 현황</h2>
+          <span>
+            창업 1세기를 향한 발걸음을 내딛으며
+            <br />
+            인류의 건강과 미래를 지켜가는 기업
+          </span>
+          <span><a href="#" onclick="return false;">VIEW MORE</a></span>
+        </div>
+        <div class="right-box">
+          <a class="produce-box produce-box-1" href="#" onclick="return false;">
+            <div class="icon-container">
+              <img
+                src="Image_file/main-images/sec-3/box-1-img.png"
+                alt="box-1-img"
+              />
+            </div>
+            <div class="titles">제품군•류</div>
+            <div class="number">593</div>
+            <div class="unit">Number of products</div>
+          </a>
+          <a class="produce-box produce-box-2" href="#" onclick="return false;">
+            <div class="icon-container">
+              <img
+                src="Image_file/main-images/sec-3/box-2-img.png"
+                alt="box-2-img"
+              />
+            </div>
+            <div class="titles">임•직원 수</div>
+            <div class="number">1,084</div>
+            <div class="unit">Number of employees</div>
+          </a>
+          <a class="produce-box produce-box-3" href="#" onclick="return false;">
+            <div class="icon-container">
+              <img
+                src="Image_file/main-images/sec-3/box-3-img.png"
+                alt="box-3-img"
+              />
+            </div>
+            <div class="titles">시가 총액</div>
+            <div class="number">539,100</div>
+            <div class="unit">Number of million</div>
+          </a>
+          <a class="produce-box produce-box-4" href="#" onclick="return false;">
+            <div class="icon-container">
+              <img
+                src="Image_file/main-images/sec-3/box-4-img.png"
+                alt="box-4-img"
+              />
+            </div>
+            <div class="titles">기업 연혁</div>
+            <div class="number">80</div>
+            <div class="unit">Number of year</div>
+          </a>
+        </div>
+      </section>
+      <section class="sec-3 section">
+        <div class="research-wave-bg" aria-hidden="true">
+          <div class="research-wave research-wave--01"></div>
+          <div class="research-wave research-wave--02"></div>
+        </div>
+        <div class="top-box">
+          <span>Field of Study</span>
+          <h4>연구 분야</h4>
+          <span>
+            오랜 역사와 노하우를 바탕으로 혁신신약 개발 선도
+            <br />
+            글로벌 트렌드에 부합하는 연구 활동
+          </span>
+        </div>
+        <div class="bottom-box">
+          <a href="#" class="circles circle-1" onclick="return false;">
+            <div class="flip-card">
+              <div class="flip-card-front">
+                <span>합성 신약</span>
+                <span>(Small Molecule)</span>
+              </div>
+              <div class="flip-card-back">
+                <p>혁신적 기전 기반의</p>
+                <p>항암•면역•대사•재생 치료제 개발,</p>
+                <p>바이오마커 기반 정밀 신약과</p>
+                <p>첨단 빅데이터 플랫폼 구축</p>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="circles circle-2" onclick="return false;">
+            <div class="flip-card">
+              <div class="flip-card-front">
+                <span>개량 신약</span>
+                <span>(IMD)</span>
+              </div>
+              <div class="flip-card-back">
+                <p>서방성 및 자가유화 기술을 통한</p>
+                <p>약물 효능 극대화,</p>
+                <p>Multi-layer·filling 복합 제제와</p>
+                <p>흡수 부위별 방출 제어 기술 적용</p>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="circles circle-3" onclick="return false;">
+            <div class="flip-card">
+              <div class="flip-card-front">
+                <span>원료의약품</span>
+                <span>(API)</span>
+              </div>
+              <div class="flip-card-back">
+                <p>펩타이드·스테로이드 제조기술 보유,</p>
+                <p>고부가가치 신기술 적용,</p>
+                <p>AI 기반 연구 플랫폼을 통한</p>
+                <p>혁신적 신약개발 가속화</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="sec-4 section">
         <div class="sec-2-4-bg" aria-hidden="true">
           <img
             src="Image_file/main-images/sec-2/sec-2-background-img.png"
             alt=""
           />
         </div>
-        <section class="sec-2 section">
-          <div class="content-wrap">
-            <div class="sec-2-text-box">
-              <h3 class="sec2-text t1">
-                변화와 혁신으로
-                <br />
-                인류의 건강을 지키고
-              </h3>
-              <h3 class="sec2-text t2">
-                첨단 생산기술로
-                <br />
-                의료기기 국산화에 앞장서며
-              </h3>
-              <h3 class="sec2-text t3">
-                한발 앞선 경쟁력으로
-                <br />
-                신약 개발을 선도하는 혁신 기업
-              </h3>
-              <h3 class="sec2-text t4">
-                고객의 건강한 내일을
-                <br />
-                약속합니다.
-              </h3>
-              <div class="sec2-text t5">
-                <img
-                  src="Image_file/main-images/sec-2/sec-2-logo.png"
-                  alt="slogun-logo"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-        <div class="sec-3-4-horizontal">
-          <section class="sec-3 section">
-            <div class="left-box">
-              <span>Pipeline of Corp.</span>
-              <h2>기업 현황</h2>
-              <span>
-                창업 1세기를 향한 발걸음을 내딛으며
-                <br />
-                인류의 건강과 미래를 지켜가는 기업
-              </span>
-              <span><a href="#" onclick="return false;">VIEW MORE</a></span>
-            </div>
-            <div class="right-box">
-              <a
-                class="produce-box produce-box-1"
-                href="#"
-                onclick="return false;"
-              >
-                <div class="icon-container">
-                  <img
-                    src="Image_file/main-images/sec-3/box-1-img.png"
-                    alt="box-1-img"
-                  />
-                </div>
-                <div class="titles">제품군•류</div>
-                <div class="number">593</div>
-                <div class="unit">Number of products</div>
-              </a>
-              <a
-                class="produce-box produce-box-2"
-                href="#"
-                onclick="return false;"
-              >
-                <div class="icon-container">
-                  <img
-                    src="Image_file/main-images/sec-3/box-2-img.png"
-                    alt="box-2-img"
-                  />
-                </div>
-                <div class="titles">임•직원 수</div>
-                <div class="number">1,084</div>
-                <div class="unit">Number of employees</div>
-              </a>
-              <a
-                class="produce-box produce-box-3"
-                href="#"
-                onclick="return false;"
-              >
-                <div class="icon-container">
-                  <img
-                    src="Image_file/main-images/sec-3/box-3-img.png"
-                    alt="box-3-img"
-                  />
-                </div>
-                <div class="titles">시가 총액</div>
-                <div class="number">539,100</div>
-                <div class="unit">Number of million</div>
-              </a>
-              <a
-                class="produce-box produce-box-4"
-                href="#"
-                onclick="return false;"
-              >
-                <div class="icon-container">
-                  <img
-                    src="Image_file/main-images/sec-3/box-4-img.png"
-                    alt="box-4-img"
-                  />
-                </div>
-                <div class="titles">기업 연혁</div>
-                <div class="number">80</div>
-                <div class="unit">Number of year</div>
-              </a>
-            </div>
-          </section>
-          <section class="sec-4 section">
-            <div class="top-box">
-              <span>Field of Study</span>
-              <h4>연구 분야</h4>
-              <span>
-                오랜 역사와 노하우를 바탕으로 혁신신약 개발 선도
-                <br />
-                글로벌 트렌드에 부합하는 연구 활동
-              </span>
-              <span><a href="#" onclick="return false;">VIEW MORE</a></span>
-            </div>
-            <div class="bottom-box">
-              <a href="#" class="circles circle-1" onclick="return false;">
-                <div class="flip-card">
-                  <div class="flip-card-front">
-                    <span>합성 신약</span>
-                    <span>(Small Molecule)</span>
-                  </div>
-                  <div class="flip-card-back">
-                    <p>혁신적 기전 기반의</p>
-                    <p>항암•면역•대사•재생 치료제 개발,</p>
-                    <p>바이오마커 기반 정밀 신약과</p>
-                    <p>첨단 빅데이터 플랫폼 구축</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="circles circle-2" onclick="return false;">
-                <div class="flip-card">
-                  <div class="flip-card-front">
-                    <span>개량 신약</span>
-                    <span>(IMD)</span>
-                  </div>
-                  <div class="flip-card-back">
-                    <p>서방성 및 자가유화 기술을 통한</p>
-                    <p>약물 효능 극대화,</p>
-                    <p>Multi-layer·filling 복합 제제와</p>
-                    <p>흡수 부위별 방출 제어 기술 적용</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="circles circle-3" onclick="return false;">
-                <div class="flip-card">
-                  <div class="flip-card-front">
-                    <span>원료의약품</span>
-                    <span>(API)</span>
-                  </div>
-                  <div class="flip-card-back">
-                    <p>펩타이드·스테로이드 제조기술 보유,</p>
-                    <p>고부가가치 신기술 적용,</p>
-                    <p>AI 기반 연구 플랫폼을 통한</p>
-                    <p>혁신적 신약개발 가속화</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </section>
-          <section class="sec-5 section">
-            <div class="bg-container">
+        <div class="content-wrap">
+          <div class="sec-2-text-box">
+            <h3 class="sec2-text t1">
+              변화와 혁신으로
+              <br />
+              인류의 건강을 지키고
+            </h3>
+            <h3 class="sec2-text t2">
+              첨단 생산기술로
+              <br />
+              의료기기 국산화에 앞장서며
+            </h3>
+            <h3 class="sec2-text t3">
+              한발 앞선 경쟁력으로
+              <br />
+              신약 개발을 선도하는 혁신 기업
+            </h3>
+            <h3 class="sec2-text t4">
+              고객의 건강한 내일을
+              <br />
+              약속합니다.
+            </h3>
+            <div class="sec2-text t5">
               <img
-                src="Image_file/main-images/sec-5/sec-5-background-img.png"
-                alt="sec-5-background-img"
+                src="Image_file/main-images/sec-2/sec-2-logo.png"
+                alt="slogun-logo"
               />
             </div>
-            <div class="text-container">
-              <div class="top-box">
-                <span>ESG System</span>
-                <h4>ESG 사회공헌</h4>
-                <span>
-                  환경문제를 개선해 지속가능한 사회를 만드는데 기여,
-                  <br />
-                  긍정적인 영향을 끼치기 위해 다양한 사회공헌 활동을 진행
-                </span>
-              </div>
-              <div class="bottom-box">
-                <div class="env-wrapper value-wrap">
-                  <div class="center-box">
-                    <i>01</i>
-                  </div>
-                  <div class="left-box">
-                    <span>환경적 지속가능성</span>
-                    <span>(Environmental)</span>
-                  </div>
-                  <div class="right-box">
-                    <a href="#" onclick="return false;">
-                      <img
-                        src="Image_file/main-images/sec-5/arrow-img.png"
-                        alt="arrow-img"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div class="soc-wrapper value-wrap">
-                  <div class="center-box">
-                    <i>02</i>
-                  </div>
-                  <div class="left-box">
-                    <span>사회적 지속가능성</span>
-                    <span>(Social)</span>
-                  </div>
-                  <div class="right-box">
-                    <a href="#" onclick="return false;">
-                      <img
-                        src="Image_file/main-images/sec-5/arrow-img.png"
-                        alt="arrow-img"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div class="gov-wrapper value-wrap">
-                  <div class="center-box">
-                    <i>03</i>
-                  </div>
-                  <div class="left-box">
-                    <span>지배구조 공시</span>
-                    <span>(Governance)</span>
-                  </div>
-                  <div class="right-box">
-                    <a href="#" onclick="return false;">
-                      <img
-                        src="Image_file/main-images/sec-5/arrow-img.png"
-                        alt="arrow-img"
-                      />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
+      <section class="sec-5 section">
+        <div class="bg-container">
+          <img
+            src="Image_file/main-images/sec-5/sec-5-background-img.png"
+            alt="신약 연구 이미지"
+          />
+        </div>
+        <div class="text-container">
+          <div class="top-box">
+            <span>RESEARCH &amp; DEVELOPMENT</span>
+            <h4>신약 개발을 통한<br />인류 건강 증진</h4>
+            <span>
+              중외제약은 혁신 신약 개발을 목표로<br />연구자와 협력을 강화하며,
+              아이디어를<br />가치있는 치료제로 현실화합니다.
+            </span>
+          </div>
+          <div class="bottom-box">
+            <a href="#" onclick="return false;">
+              <span>자세히 보기</span>
+              <img src="Image_file/main-images/sec-5/arrow-img.png" alt="" />
+            </a>
+          </div>
+        </div>
+      </section>
       <section class="sec-6 section">
         <div class="top-box">
-          <span>Search of Products</span>
+          <span>PRODUCT SEARCH</span>
           <h4>제품 검색</h4>
-          <div class="word-search-tag">
-            <span># 초성검색</span>
-            <div class="word-box" onclick="return false;">
-              <div class="words"><a href="#">ㄱ</a></div>
-              <div class="words"><a href="#">ㄴ</a></div>
-              <div class="words"><a href="#">ㄷ</a></div>
-              <div class="words"><a href="#">ㄹ</a></div>
-              <div class="words"><a href="#">ㅁ</a></div>
-              <div class="words"><a href="#">ㅂ</a></div>
-              <div class="words"><a href="#">ㅅ</a></div>
-              <div class="words"><a href="#">ㅇ</a></div>
-              <div class="words"><a href="#">ㅈ</a></div>
-              <div class="words"><a href="#">ㅊ</a></div>
-              <div class="words"><a href="#">ㅋ</a></div>
-              <div class="words"><a href="#">ㅌ</a></div>
-              <div class="words"><a href="#">ㅍ</a></div>
-              <div class="words"><a href="#">ㅎ</a></div>
+          <p>
+            제품명, 성분명, 제품구분 등 다양한 조건으로 제품을 검색하실 수
+            있습니다.
+          </p>
+        </div>
+
+        <div class="product-filter-panel">
+          <div class="filter-row">
+            <strong><i></i>제품 구분 선택</strong>
+            <div class="filter-options">
+              <button class="active" type="button">전체</button>
+              <button type="button">전문의약품</button>
+              <button type="button">일반의약품</button>
+              <button type="button">의약외품</button>
+              <button type="button">건강기능식품</button>
+              <button type="button">수술관련기기</button>
+              <button type="button">의료기기</button>
+              <button type="button">기타</button>
             </div>
           </div>
-          <div class="category-search-tag">
-            <span># 카테고리 검색</span>
-            <div class="category-box" onclick="return false;">
-              <div class="split-box split-box-1">
-                <div class="categories"><a href="#">일반의약품</a></div>
-                <div class="categories"><a href="#">전문의약품</a></div>
-                <div class="categories"><a href="#">의약외품</a></div>
-                <div class="categories"><a href="#">의료기기</a></div>
-                <div class="categories"><a href="#">건강기능식품</a></div>
-                <div class="categories"><a href="#">심전계</a></div>
-              </div>
-              <div class="split-box split-box-2">
-                <div class="categories"><a href="#">수술관련기기</a></div>
-                <div class="categories"><a href="#">멸균기</a></div>
-                <div class="categories"><a href="#">산부인과</a></div>
-                <div class="categories"><a href="#">유아케어</a></div>
-                <div class="categories"><a href="#">폐활량계</a></div>
-                <div class="categories"><a href="#">기타</a></div>
-              </div>
+          <div class="filter-row">
+            <strong><i></i>제품명 / 성분명 선택</strong>
+            <div class="filter-options">
+              <button class="active" type="button">전체</button>
+              <button class="btn_spell" type="button">ㄱ</button>
+              <button class="btn_spell" type="button">ㄴ</button>
+              <button class="btn_spell" type="button">ㄷ</button>
+              <button class="btn_spell" type="button">ㄹ</button>
+              <button class="btn_spell" type="button">ㅁ</button>
+              <button class="btn_spell" type="button">ㅂ</button>
+              <button class="btn_spell" type="button">ㅅ</button>
+              <button class="btn_spell" type="button">ㅇ</button>
+              <button class="btn_spell" type="button">ㅈ</button>
+              <button class="btn_spell" type="button">ㅊ</button>
+              <button class="btn_spell" type="button">ㅋ</button>
+              <button class="btn_spell" type="button">ㅌ</button>
+              <button class="btn_spell" type="button">ㅍ</button>
+              <button class="btn_spell" type="button">ㅎ</button>
             </div>
           </div>
           <div class="search-wrap">
@@ -681,86 +613,97 @@
               placeholder="검색어를 입력해주세요."
               aria-label="검색어 입력"
             />
-            <button id="btnSearch" class="search-button" type="button">
-              <img
-                src="Image_file/main-images/sec-6/search-img.png"
-                alt="search-img"
-              />
+            <button
+              id="btnSearch"
+              class="search-button"
+              type="button"
+              aria-label="검색"
+            >
+              <img src="Image_file/main-images/sec-6/search-img.png" alt="" />
             </button>
           </div>
         </div>
-        <div class="goods-slider swiper">
-          <div class="swiper-wrapper">
-            <div class="goods-box swiper-slide">
-              <a href="#" onclick="return false;">
+
+        <div class="product-results">
+          <div class="product-result-heading">
+            <strong>검색 결과 <em>561</em>건</strong>
+            <a href="#" onclick="return false;">전체보기 <span>→</span></a>
+          </div>
+
+          <div class="product-grid">
+            <article class="product-card">
+              <span class="product-type">전문의약품</span>
+              <h5>덴디돌</h5>
+              <div class="product-card-body">
                 <img
                   src="Image_file/main-images/sec-6/goods-1.png"
-                  alt="goods-img"
+                  alt="리바로"
                 />
-              </a>
-              <div class="text-box">
-                <span>건강기능식품</span>
-                <span>덴디돌(정)</span>
-                <span> <strong>제품 구분</strong><br />건강기능식품</span>
+                <p>뼈의 형성에 도움,<br />치주 조직 보호,<br />골다공증 감소</p>
               </div>
-            </div>
-
-            <div class="goods-box swiper-slide">
-              <a href="#" onclick="return false;">
+              <a href="#" onclick="return false;">자세히 보기</a>
+            </article>
+            <article class="product-card">
+              <span class="product-type">일반의약품</span>
+              <h5>비타민D3</h5>
+              <div class="product-card-body">
                 <img
                   src="Image_file/main-images/sec-6/goods-2.png"
-                  alt="goods-img"
+                  alt="비타민D3"
                 />
-              </a>
-              <div class="text-box">
-                <span>건강기능식품</span>
-                <span>비타민D3(정)</span>
-                <span> <strong>제품 구분</strong><br />건강기능식품 </span>
+                <p>
+                  칼슘과 인의 흡수,<br />뼈의 형성과 유지,<br />
+                  골다공증 위험 감소
+                </p>
               </div>
-            </div>
-
-            <div class="goods-box swiper-slide">
-              <a href="#" onclick="return false;">
+              <a href="#" onclick="return false;">자세히 보기</a>
+            </article>
+            <article class="product-card">
+              <span class="product-type">일반의약품</span>
+              <h5>프렌즈아이드롭</h5>
+              <div class="product-card-body">
                 <img
                   src="Image_file/main-images/sec-6/goods-3.png"
-                  alt="goods-img"
+                  alt="프렌즈아이드롭"
                 />
-              </a>
-              <div class="text-box">
-                <span>일반의약품</span>
-                <span>프렌즈 아이드롭</span>
-                <span> <strong>제품 구분</strong><br />일반의약품</span>
+                <p>눈물 보충,<br />눈의 피로 저하,<br />눈의 흐림 개선</p>
               </div>
-            </div>
-
-            <div class="goods-box swiper-slide">
-              <a href="#" onclick="return false;">
+              <a href="#" onclick="return false;">자세히 보기</a>
+            </article>
+            <article class="product-card">
+              <span class="product-type">건강기능식품</span>
+              <h5>투비원</h5>
+              <div class="product-card-body">
                 <img
                   src="Image_file/main-images/sec-6/goods-4.png"
-                  alt="goods-img"
+                  alt="투비원"
                 />
-              </a>
-              <div class="text-box">
-                <span>일반의약품</span>
-                <span>투비원(정)</span>
-                <span> <strong>제품 구분</strong><br />일반의약품</span>
+                <p>육체피로 해소,<br />체력저하 개선,<br />통증 완화</p>
               </div>
-            </div>
-
-            <div class="goods-box swiper-slide">
-              <a href="#" onclick="return false;">
+              <a href="#" onclick="return false;">자세히 보기</a>
+            </article>
+            <article class="product-card">
+              <span class="product-type">전문의약품</span>
+              <h5>뉴글리아</h5>
+              <div class="product-card-body">
                 <img
                   src="Image_file/main-images/sec-6/goods-5.png"
-                  alt="goods-img"
+                  alt="뉴글리아"
                 />
-              </a>
-              <div class="text-box">
-                <span>전문의약품</span>
-                <span>뉴글리아시럽</span>
-                <span> <strong>제품 구분</strong><br />일반의약품</span>
+                <p>기억력저하 개선,<br />방향감각장애 개선,<br />집중력 향상</p>
               </div>
-            </div>
+              <a href="#" onclick="return false;">자세히 보기</a>
+            </article>
           </div>
+
+          <button class="product-more" type="button">
+            더보기
+            <span
+              ><img
+                src="Image_file/main-images/sec-6/arrow_down.svg"
+                alt="arrow_down"
+            /></span>
+          </button>
         </div>
       </section>
       <section class="sec-7 section">
@@ -799,9 +742,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  “갑자기 생긴 물집이 너무 아프다면?”
-                  <br />
-                  대상포진 주의!
+                  “갑자기 생긴 물집이 너무 아프다면?” 대상포진 주의!
                 </div>
                 <div class="text-bottom">2025-11-14</div>
               </div>
@@ -815,9 +756,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  상처를 보호하는 엄마의 손길! •••
-                  <br />
-                  ‘하이맘’의 브랜드 스토리
+                  상처를 보호하는 엄마의 손길! ••• ‘하이맘’의 브랜드 스토리
                 </div>
                 <div class="text-bottom">2025-09-26</div>
               </div>
@@ -831,9 +770,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  짐바브웨 오지에 꽃피운 ‘사랑의 인술’ •••
-                  <br />
-                  강동원·전진경 의사, 제13회 JW성천상 수상
+                  짐바브웨 오지에 꽃피운 ‘사랑의 인술’ ••• 제13회 JW성천상 수상
                 </div>
                 <div class="text-bottom">2025-09-26</div>
               </div>
@@ -847,9 +784,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  JW메디칼, 글로벌 파트너십으로 영상진단장비
-                  <br />
-                  국내 시장 공략
+                  JW메디칼, 글로벌 파트너십으로 영상진단장비 국내 시장 공략
                 </div>
                 <div class="text-bottom">2025-02-23</div>
               </div>
@@ -863,9 +798,8 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  “기술로 환자를 생각하다” ••• 복약 순응도와
-                  <br />
-                  환자 삶의 질 함께 높이는 JW
+                  “기술로 환자를 생각하다” ••• 복약 순응도와 환자 삶의 질 함께
+                  높이는 JW
                 </div>
                 <div class="text-bottom">2025-01-24</div>
               </div>
@@ -879,8 +813,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  JW중외제약, 자궁근종 치료제 License-in
-                  <br />계약 체결 ••• 오리지널 포트폴리오 확대
+                  JW중외제약, 자궁근종 치료제 License-in 계약 체결
                 </div>
                 <div class="text-bottom">2024-06-28</div>
               </div>
@@ -894,9 +827,7 @@
               </div>
               <div class="text-container">
                 <div class="text-top">
-                  JW중외제약, 글로벌 학회서 혁신신약 연구결과
-                  <br />
-                  관심 집중
+                  JW중외제약, 글로벌 학회서 혁신신약 연구결과 관심 집중
                 </div>
                 <div class="text-bottom">2024-05-31</div>
               </div>
@@ -926,21 +857,13 @@
         <div class="text-container">
           <span>Contact Us</span>
           <h2>고객문의</h2>
-          <span>중외제약은 고객님의 목소리에 항상 귀 기울이겠습니다</span>
-          <div class="contact-box">
-            <a class="arrow-wrapper" href="#" onclick="return false;">
-              <img
-                src="Image_file/main-images/sec-8/arrow-black.png"
-                alt="arrow-black"
-              />
-            </a>
-            <div class="logo-wrapper">
-              <img
-                src="Image_file/main-images/sec-8/JW-logo-black.png"
-                alt="JW-logo-black"
-              />
-            </div>
-          </div>
+          <span
+            >궁금한 점이 있으신가요?<br />전문 상담원이 친절하게 안내해
+            드리겠습니다.</span
+          >
+          <a class="contact-cta" href="#" onclick="return false;">
+            <span>문의하기</span><b>→</b>
+          </a>
         </div>
       </section>
     </main>
