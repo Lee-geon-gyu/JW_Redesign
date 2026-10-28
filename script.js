@@ -1444,7 +1444,7 @@ function postHeroScroll__init() {
       const upward = currentY < endingLastY;
       endingLastY = currentY;
       if (upward && currentY < endingStart - 6) {
-        if (family) family.open = false;
+        family?.dispatchEvent(new Event("jw:family-close"));
         pageLenis.stop();
         setMode("snap");
         measureStops();
@@ -2692,15 +2692,6 @@ function footerReveal__init() {
     draw();
     requestPaint();
   }).observe(stage);
-  document
-    .querySelector(".site-family")
-    ?.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") event.currentTarget.open = false;
-    });
-  document.addEventListener("pointerdown", (event) => {
-    const family = document.querySelector(".site-family");
-    if (family?.open && !family.contains(event.target)) family.open = false;
-  });
   contact.addEventListener("jw:contact-leave", (event) => {
     const generation = ++exitGeneration;
     exiting = true;
@@ -3400,7 +3391,7 @@ productImageCenter__init({
 // This presentation intentionally has no outbound or content navigation.
 function prototypeInteractions__init() {
   const allowed =
-    ".top-btn,header .hd-logo-box a,[data-product-category],header .tab-box button,.drawer-close,.drawer-toggle,.drawer-backdrop,.investment-grid .ig-card";
+    ".top-btn,header .hd-logo-box a,[data-product-category],header .tab-box button,.drawer-close,.drawer-toggle,.drawer-backdrop,.investment-grid .ig-card,.site-family summary";
   function neutralize(root) {
     const links = [
       ...(root.matches?.("a") ? [root] : []),
@@ -3485,31 +3476,86 @@ function prototypeInteractions__init() {
     },
     true,
   );
-  const family = document.querySelector(".site-family");
-  let familyCloseTimer = 0;
-  const openFamily = () => {
-    clearTimeout(familyCloseTimer);
-    family.open = true;
-  };
-  const closeFamily = () => {
-    clearTimeout(familyCloseTimer);
-    familyCloseTimer = setTimeout(() => {
-      if (!family.matches(":hover") && !family.contains(document.activeElement))
-        family.open = false;
-    }, 240);
-  };
-  family?.addEventListener("pointerenter", openFamily);
-  family?.addEventListener("pointerleave", closeFamily);
-  family?.querySelector("ul")?.addEventListener("pointerenter", openFamily);
-  family?.addEventListener("focusin", openFamily);
-  family?.addEventListener("focusout", () =>
-    requestAnimationFrame(() => {
-      if (!family.contains(document.activeElement) && !family.matches(":hover"))
-        closeFamily();
-    }),
-  );
 }
 prototypeInteractions__init();
+
+function familySite__init() {
+  const family = document.querySelector(".site-family");
+  const summary = family?.querySelector("summary");
+  const list = family?.querySelector("ul");
+  const footer = family?.closest("footer");
+  if (!summary || !list || !footer) return;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let expanded = false,
+    frame = 0,
+    timer = 0;
+
+  function finish() {
+    clearTimeout(timer);
+    if (!expanded) family.open = false;
+    family.dataset.state = expanded ? "open" : "closed";
+  }
+  function setOpen(next) {
+    if (next === expanded) return;
+    expanded = next;
+    cancelAnimationFrame(frame);
+    clearTimeout(timer);
+    summary.setAttribute("aria-expanded", String(next));
+    list.setAttribute("aria-hidden", String(!next));
+    list.inert = !next;
+    family.dataset.state = next ? "opening" : "closing";
+    if (next) {
+      const alreadyVisible = family.open;
+      family.open = true;
+      if (alreadyVisible || reduced.matches)
+        family.classList.add("is-expanded");
+      else
+        frame = requestAnimationFrame(() => {
+          frame = requestAnimationFrame(() => {
+            if (expanded) family.classList.add("is-expanded");
+          });
+        });
+    } else {
+      family.classList.remove("is-expanded");
+      if (list.contains(document.activeElement))
+        summary.focus({ preventScroll: true });
+    }
+    if (reduced.matches) finish();
+    else timer = setTimeout(finish, 450);
+  }
+  family.open = false;
+  family.dataset.state = "closed";
+  list.inert = true;
+  list.setAttribute("aria-hidden", "true");
+  summary.setAttribute("aria-expanded", "false");
+  summary.addEventListener("click", (event) => {
+    event.preventDefault();
+    setOpen(!expanded);
+  });
+  list.addEventListener("transitionend", (event) => {
+    if (event.target === list && event.propertyName === "clip-path") finish();
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (!list.contains(event.target) && !summary.contains(event.target))
+      setOpen(false);
+  });
+  family.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+      summary.focus({ preventScroll: true });
+    }
+  });
+  family.addEventListener("jw:family-close", () => setOpen(false));
+  document.addEventListener("jw:return-top", () => setOpen(false));
+  new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.1)
+        setOpen(false);
+    },
+    { threshold: [0, 0.1] },
+  ).observe(footer);
+}
+familySite__init();
 
 // Pixel-based SVG contours keep the concave corner and arrow aligned at every size.
 function responsiveFolds__init() {
