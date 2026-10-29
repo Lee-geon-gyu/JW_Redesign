@@ -169,7 +169,12 @@ function sectionAosSequence__init() {
             ),
           );
         group.section.dataset.revealCoverage = coverage.toFixed(4);
-        const entered = coverage >= 0.4 - 0.0001;
+        // Contact stays revealed below its section, including the footer return.
+        // Re-arm its entrance only after leaving toward the preceding section.
+        const entered =
+          coverage >= 0.4 - 0.0001 ||
+          (group.section.id === "jw-contact" &&
+            entry.boundingClientRect.top <= 0);
         if (entered === group.active) return;
         group.active = entered;
         group.generation++;
@@ -287,27 +292,8 @@ function headerSurface__init(header) {
   function paint() {
     const height = header.offsetHeight;
     const headerTop = header.getBoundingClientRect().top;
-    let surfaceTop = videoTop,
-      surfaceBottom = videoBottom,
-      overContact = false;
-    const contact = document.querySelector("#jw-contact"),
-      contactStage = contact?.querySelector(".contact-stage");
-    if (contactStage) {
-      const rect = contactStage.getBoundingClientRect(),
-        p = Number(contact.dataset.expandProgress || 0);
-      const inset = rect.height * 0.29 * (1 - p);
-      const top = rect.top + inset,
-        bottom = Math.min(
-          rect.bottom - inset,
-          document.querySelector("#jw-footer").getBoundingClientRect().top,
-        );
-      if (bottom > headerTop && top < headerTop + height) {
-        surfaceTop = top;
-        surfaceBottom = bottom;
-        overContact = true;
-      }
-    }
-    header.classList.toggle("over-contact", overContact);
+    const surfaceTop = videoTop,
+      surfaceBottom = videoBottom;
     const videoStart = Math.max(0, Math.min(height, surfaceTop - headerTop));
     const videoEnd = Math.max(
       videoStart,
@@ -342,7 +328,6 @@ function headerSurface__init(header) {
     paint();
   }
   header.addEventListener("jw:menu-toggle", paint);
-  header.addEventListener("jw:contact-surface", paint);
   return { measure, update };
 }
 
@@ -526,6 +511,7 @@ function loadingPage__init() {
       (scrollY - geometry.scrollStart - geometry.distance) / geometry.height,
     );
     gsap.set(stage, {
+      y: reducedMotion ? 0 : -geometry.height * 0.12 * cover,
       filter: cover > 0 ? `blur(${(cover * 32 * 0.33).toFixed(3)}px)` : "none",
     });
     body.dataset.heroCover = cover.toFixed(4);
@@ -1372,7 +1358,10 @@ function postHeroScroll__init() {
       )
         return;
       const rect = section.getBoundingClientRect();
-      const start = rect.top + pageY;
+      // Footer reveal transforms its paint position; snap to its layout position.
+      const start = section.matches("footer")
+        ? section.offsetTop
+        : rect.top + pageY;
       points.push(start);
       // Preserve access to every part of sections that are taller than a screen.
       const last =
@@ -1574,28 +1563,6 @@ function postHeroScroll__init() {
       direction > 0
         ? stops.find((value) => value > current + 2)
         : [...stops].reverse().find((value) => value < current - 2);
-    if (
-      target !== undefined &&
-      direction < 0 &&
-      Math.abs(current - endingStart) <= 2
-    ) {
-      moving = true;
-      body.dataset.snapMoving = "true";
-      setMode("contact-shrink");
-      ending.dispatchEvent(
-        new CustomEvent("jw:contact-leave", {
-          detail: {
-            resume() {
-              moving = false;
-              body.dataset.snapMoving = "false";
-              setMode("snap");
-              moveTo(target);
-            },
-          },
-        }),
-      );
-      return;
-    }
     if (target !== undefined) moveTo(target);
   }
 
@@ -2618,115 +2585,60 @@ function brandCursor__init() {
 brandCursor__init();
 
 function footerReveal__init() {
-  const footer = document.querySelector("#jw-footer"),
-    contact = document.querySelector("#jw-contact");
-  const stage = contact?.querySelector(".contact-stage"),
-    card = contact?.querySelector(".contact-card");
-  if (!footer || !stage || !card) return;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)"),
-    motion = { expand: 0 };
-  let frame = 0,
-    expanded = false,
-    footerHeight = 0,
-    exiting = false,
-    exitGeneration = 0;
-  const clamp = (n) => Math.min(1, Math.max(0, n));
-  function draw() {
-    const p = motion.expand;
-    const width = stage.clientWidth,
-      height = stage.clientHeight;
-    const insetX = width * (width <= 760 ? 0.08 : 0.1875) * (1 - p);
-    const insetY = height * 0.29 * (1 - p);
-    const radius = Math.min((height - 2 * insetY) / 2, 220) * (1 - p);
-    card.style.clipPath = `inset(${insetY}px ${insetX}px round ${radius}px)`;
-    card.style.setProperty(
-      "--contact-content-opacity",
-      String(clamp((p - 0.55) / 0.45)),
-    );
-    contact.dataset.expandProgress = p.toFixed(4);
-    document
-      .querySelector("header")
-      .dispatchEvent(new Event("jw:contact-surface"));
-  }
+  const footer = document.querySelector("#jw-footer");
+  const main = document.querySelector("main");
+  const contact = document.querySelector("#jw-contact");
+  if (!footer || !main || !contact) return;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let frame = 0;
   function paint() {
     frame = 0;
-    const rect = contact.getBoundingClientRect();
-    if (exiting && rect.top > innerHeight * 0.2) exiting = false;
-    const shouldExpand = !exiting && rect.top <= innerHeight * 0.2;
-    if (shouldExpand !== expanded) {
-      expanded = shouldExpand;
-      gsap.to(motion, {
-        expand: expanded ? 1 : 0,
-        duration: reduced.matches ? 0 : 1,
-        ease: "power2.inOut",
-        overwrite: true,
-        onUpdate: draw,
-      });
-    }
-    const footerRect = footer.getBoundingClientRect(),
-      cover = clamp((innerHeight - footerRect.top) / innerHeight);
-    stage.style.filter = reduced.matches
+    const mainBottom = main.getBoundingClientRect().bottom;
+    const travel = Math.min(footer.offsetHeight, innerHeight);
+    const revealed = Math.max(0, Math.min(travel, innerHeight - mainBottom));
+    const progress = travel ? revealed / travel : 0;
+    const radius = Math.min(80, Math.max(28, contact.clientWidth * 0.04));
+    const rounding = reduced.matches
+      ? progress > 0
+        ? 1
+        : 0
+      : 1 - (1 - progress) ** 2;
+    contact.style.setProperty(
+      "--footer-radius",
+      `${(radius * rounding).toFixed(3)}px`,
+    );
+    // Keep the footer behind the rounded main surface until it is uncovered.
+    footer.style.transform = reduced.matches
       ? "none"
-      : `blur(${(cover * 12).toFixed(2)}px)`;
-    contact.dataset.footerCover = cover.toFixed(4);
-    document.body.classList.toggle("ending-active", rect.top <= 2);
-  }
-  function measure() {
-    const next = footer.offsetHeight;
-    if (next !== footerHeight) {
-      footerHeight = next;
-      contact.style.setProperty("--contact-footer-height", `${next}px`);
-      footer.style.marginTop = `-${next}px`;
+      : `translate3d(0,${(revealed - travel).toFixed(3)}px,0)`;
+    footer.dataset.revealProgress = progress.toFixed(4);
+    // IntersectionObserver cannot see the Contact surface covering the footer.
+    if (revealed <= 1) {
+      footer
+        .querySelector(".site-family[open]")
+        ?.dispatchEvent(new Event("jw:family-close"));
     }
-    draw();
-    requestPaint();
+    document.body.classList.toggle(
+      "ending-active",
+      contact.getBoundingClientRect().top <= 2,
+    );
   }
   function requestPaint() {
     if (!frame) frame = requestAnimationFrame(paint);
   }
+  function measure() {
+    main.style.setProperty(
+      "--footer-contact-height",
+      `${contact.offsetHeight}px`,
+    );
+    requestPaint();
+  }
   addEventListener("scroll", requestPaint, { passive: true });
   addEventListener("resize", measure, { passive: true });
   addEventListener("load", measure);
-  new ResizeObserver(measure).observe(footer);
-  new ResizeObserver(() => {
-    draw();
-    requestPaint();
-  }).observe(stage);
-  contact.addEventListener("jw:contact-leave", (event) => {
-    const generation = ++exitGeneration;
-    exiting = true;
-    expanded = false;
-    contact.dataset.exitState = "shrinking";
-    let resumed = false;
-    function resume() {
-      if (resumed || generation !== exitGeneration) return;
-      resumed = true;
-      contact.dataset.exitState = "leaving";
-      event.detail.resume();
-    }
-    gsap.to(motion, {
-      expand: 0,
-      duration: reduced.matches ? 0 : 1.15,
-      ease: "power2.inOut",
-      overwrite: true,
-      onUpdate() {
-        draw();
-        if (motion.expand <= 0.2) resume();
-      },
-      onComplete() {
-        draw();
-        resume();
-      },
-    });
-  });
-  document.addEventListener("jw:return-top", () => {
-    exitGeneration++;
-    exiting = false;
-    expanded = false;
-    gsap.killTweensOf(motion);
-    motion.expand = 0;
-    draw();
-  });
+  reduced.addEventListener("change", requestPaint);
+  new ResizeObserver(requestPaint).observe(footer);
+  new ResizeObserver(measure).observe(contact);
   measure();
   paint();
 }

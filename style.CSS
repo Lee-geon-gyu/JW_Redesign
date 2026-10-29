@@ -1774,7 +1774,7 @@ body.intro-complete .hero-video-progress {
   height: 340svh;
 }
 .intro-stage {
-  will-change: filter;
+  will-change: transform, filter;
 }
 
 /* All three header tools use the same icon and hit-area dimensions. */
@@ -1958,7 +1958,7 @@ main > .rnd-section {
 /* Lift only the section heading, retaining the card row's current position. */
 .rnd-section__intro {
   text-align: left;
-  transform: translateY(-28px);
+  transform: translateY(var(--section-heading-lift));
 }
 .rnd-section__intro h2 {
   text-align: left;
@@ -2030,7 +2030,7 @@ main > .rnd-section {
 }
 @media (max-width: 900px) {
   .rnd-section__intro {
-    transform: translateY(-12px);
+    transform: translateY(var(--section-heading-lift));
   }
   .rnd-cards {
     align-items: stretch;
@@ -4173,11 +4173,11 @@ body[data-intro-state="ready"] header {
   visibility: visible;
 }
 main > #jw-rd {
-  padding-top: 136px;
+  padding-top: var(--section-heading-top);
   padding-bottom: 16px;
 }
 #jw-rd .rnd-cards {
-  margin-top: 16px;
+  margin-top: var(--section-heading-gap);
   max-height: 660px;
 }
 main > #jw-research-fields {
@@ -4189,11 +4189,11 @@ main > #jw-research-fields {
   transform: translateY(-50%) scale(1);
 }
 main > #jw-investment {
-  padding-top: calc(clamp(104px, 12svh, 128px) + 24px);
+  padding-top: var(--section-heading-top);
   padding-bottom: 32px;
 }
 #jw-investment .investment-grid {
-  margin-top: 24px;
+  margin-top: var(--section-heading-gap);
 }
 
 /* Numbered, centered product cards. The supplied photograph backgrounds remain intact. */
@@ -4345,11 +4345,11 @@ main > #jw-newsroom {
     --section-gutter: 20px;
   }
   main > #jw-rd {
-    padding-top: 100px;
+    padding-top: var(--section-heading-top);
     padding-bottom: 16px;
   }
   #jw-rd .rnd-cards {
-    margin-top: 18px;
+    margin-top: var(--section-heading-gap);
   }
   main > #jw-research-fields {
     padding-top: 104px;
@@ -4386,7 +4386,7 @@ main > #jw-newsroom {
 }
 @media (max-width: 760px) {
   main > #jw-investment {
-    padding-top: 108px;
+    padding-top: var(--section-heading-top);
     padding-bottom: 76px;
   }
   .product-placeholder.products-section {
@@ -5247,43 +5247,52 @@ header .menu-box .menu-item-container ul li a:hover {
   }
 }
 
-/* The contact image expands in its sticky stage; the footer covers it from below. */
+/* The rounded contact panel scrolls away to uncover the footer beneath main. */
 main {
   border-radius: 0;
+  /* End the backing at Contact so it cannot fill the rounded cutouts. */
+  background: linear-gradient(#fff, #fff) top / 100%
+    calc(100% - var(--footer-contact-height, 100svh)) no-repeat;
 }
 main > #jw-contact.contact-section {
   display: block;
   position: relative;
   max-width: none;
   width: 100%;
-  height: calc(100svh + var(--contact-footer-height, 700px));
-  min-height: 0;
-  padding: 0;
-  overflow: visible;
+  height: 100svh;
+  min-height: 600px;
+  padding: calc(
+      (clamp(48px, 9.76svh, 110px) + clamp(120px, 13.28125vw, 170px)) / 2
+    )
+    var(--section-gutter);
+  overflow: hidden;
+  border-radius: 0 0 var(--footer-radius, 0px) var(--footer-radius, 0px);
+  /* Clip this single screen instead of the full, scrolling page surface. */
+  clip-path: inset(
+    0 round 0 0 var(--footer-radius, 0px) var(--footer-radius, 0px)
+  );
   background: #fff;
 }
 #jw-contact > .contact-stage {
-  position: sticky;
-  top: 0;
+  position: relative;
   width: 100%;
   max-width: none;
-  height: 100svh;
-  overflow: hidden;
+  height: 100%;
 }
 #jw-contact .contact-card {
   width: 100%;
   height: 100%;
-  border-radius: 0;
-  clip-path: inset(29% 18.75% round 220px);
+  border-radius: clamp(18px, 1.25vw, 24px);
   isolation: isolate;
 }
 #jw-contact .contact-card::after {
-  background: radial-gradient(
-    ellipse at 50% 48%,
-    rgba(0, 0, 0, 0) 5%,
-    rgba(0, 0, 0, 0.1773) 34%,
-    rgba(0, 0, 0, 0.798) 78%,
-    rgba(0, 0, 0, 1) 100%
+  background: linear-gradient(
+    90deg,
+    rgba(9, 22, 42, 0.4) 0%,
+    rgba(9, 22, 42, 0.18) 32%,
+    rgba(9, 22, 42, 0) 52%,
+    rgba(9, 22, 42, 0.23) 72%,
+    rgba(9, 22, 42, 0.48) 100%
   );
 }
 #jw-contact .contact-card__image {
@@ -5292,9 +5301,8 @@ main > #jw-contact.contact-section {
 #jw-contact .contact-content {
   position: absolute;
   inset: 0;
-  width: min(calc(100% - 240px), 1680px);
+  width: 100%;
   margin-inline: auto;
-  opacity: var(--contact-content-opacity, 0);
 }
 #jw-contact .contact-copy {
   left: 4.39%;
@@ -5303,15 +5311,16 @@ main > #jw-contact.contact-section {
   transform: translateY(-50%);
 }
 #jw-contact .contact-center {
-  right: 2%;
+  right: 4.39%;
   top: 50%;
 }
 footer#jw-footer.site-footer {
   position: relative;
-  z-index: 3;
+  z-index: 0;
   overflow: hidden;
-  border-radius: clamp(28px, 4vw, 80px) clamp(28px, 4vw, 80px) 0 0;
+  border-radius: 0;
   background: #000;
+  will-change: transform;
 }
 .site-footer .site-footer__inner {
   display: grid;
@@ -5330,7 +5339,7 @@ footer#jw-footer.site-footer {
 }
 @media (max-width: 900px) {
   #jw-contact .contact-content {
-    width: calc(100% - 40px);
+    width: 100%;
   }
   #jw-contact .contact-copy {
     left: 3%;
@@ -5341,11 +5350,14 @@ footer#jw-footer.site-footer {
   }
 }
 @media (max-width: 760px) {
+  main > #jw-contact.contact-section {
+    padding: 88px var(--section-gutter);
+  }
   #jw-contact .contact-card {
-    clip-path: inset(29% 8% round 180px);
+    border-radius: 20px;
   }
   #jw-contact .contact-copy {
-    top: 18%;
+    top: 12%;
     left: 4%;
     right: 4%;
     max-width: none;
@@ -5415,9 +5427,6 @@ header.menu-open.header-surface > .header-menu-background {
   top: calc(100% - 1px);
   background: #fff;
 }
-header.header-surface.over-contact:not(.menu-open)::before {
-  opacity: 1;
-}
 header .menu-box .menu-item-container ul li:hover > a,
 header .menu-box .menu-item-container ul li > a:focus-visible {
   background: var(--primary-color);
@@ -5443,8 +5452,8 @@ header .menu-box .menu-item-container ul li > a:focus-visible {
 }
 
 #jw-investment .investment-section__intro {
-  transform: translateY(-18px);
-  margin-bottom: -18px;
+  transform: translateY(var(--section-heading-lift));
+  margin-bottom: 0;
 }
 #jw-investment .investment-section__intro h2 {
   font-size: clamp(63.36px, 7.2vw, 129.6px);
@@ -6144,5 +6153,27 @@ header .menu-item-container {
   .rnd-card__topics {
     gap: 5px;
     font-size: 13px;
+  }
+}
+
+/* Research and Investment share the same heading line and card spacing. */
+main > :is(#jw-rd, #jw-investment) {
+  --section-heading-top: 136px;
+  --section-heading-lift: -28px;
+  --section-heading-gap: 16px;
+}
+#jw-investment #investment-title {
+  line-height: 1;
+}
+@media (max-width: 900px) {
+  main > :is(#jw-rd, #jw-investment) {
+    --section-heading-top: 100px;
+    --section-heading-lift: -12px;
+    --section-heading-gap: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  footer#jw-footer.site-footer {
+    will-change: auto;
   }
 }
