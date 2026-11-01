@@ -3250,7 +3250,7 @@ productImageCenter__init({
 // This presentation intentionally has no outbound or content navigation.
 function prototypeInteractions__init() {
   const allowed =
-    ".top-btn,header .hd-logo-box a,[data-product-category],header .tab-box button,.drawer-close,.drawer-toggle,.drawer-backdrop,.investment-grid .ig-card,.site-family summary";
+    ".top-btn,header .hd-logo-box a,#jw-products .products-prev,#jw-products .products-next,[data-product-category],header .tab-box button,.drawer-close,.drawer-toggle,.drawer-backdrop,.investment-grid .ig-card,.site-family summary";
   function neutralize(root) {
     const links = [
       ...(root.matches?.("a") ? [root] : []),

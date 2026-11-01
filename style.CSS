@@ -5739,7 +5739,7 @@ header .menu-item-container {
   }
 }
 
-/* Revision 48: small investment cards use 75% black.
+/* Revision 48: small investment cards use 85% black.
    Crossfade the shade layers when cards exchange their feature role. */
 #jw-investment .ig-card__shade {
   background: none;
@@ -5764,7 +5764,7 @@ header .menu-item-container {
   opacity: 0;
 }
 #jw-investment .ig-card__shade::after {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.85);
   opacity: 1;
 }
 #jw-investment .ig-card.is-feature .ig-card__shade::before {
