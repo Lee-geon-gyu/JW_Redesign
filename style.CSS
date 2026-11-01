@@ -829,12 +829,6 @@ header.peek > .hd-container {
   visibility: visible;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .intro-hero {
-    will-change: auto;
-  }
-}
-
 header.intro-tracking {
   transition:
     opacity 0.5s ease,
@@ -1240,14 +1234,6 @@ main > .rnd-section {
     padding-top: 78px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .rnd-card,
-  .rnd-card *,
-  .rnd-card__surface::after {
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
-  }
-}
 
 /* The same text composition is painted in black and in a video-clipped white layer. */
 .intro-heading {
@@ -1608,12 +1594,6 @@ main > .sec-3.pipeline-section {
     font-size: max(12px, 11px);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .pipeline-card *,
-  .pipeline-all {
-    transition: none;
-  }
-}
 
 header.header-surface.over-hero:not(.menu-open)::before {
   box-shadow: none;
@@ -1754,14 +1734,6 @@ body.intro-complete .hero-video-progress {
 @media (max-width: 480px) {
   .pipeline-section__intro h2 {
     font-size: max(12px, clamp(27px, 7.3vw, 35px));
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pipeline-all,
-  .pipeline-all *,
-  .pipeline-all *::after {
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
   }
 }
 .intro-heading__line--second strong {
@@ -1916,11 +1888,6 @@ main > .rnd-section {
     font-size: max(12px, 10px);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .rnd-card {
-    transition-duration: 0.01ms;
-  }
-}
 
 /* White video playback indicator. */
 .hero-video-progress {
@@ -2049,13 +2016,6 @@ main > .rnd-section {
   .rnd-card__arrow {
     width: 44px;
     height: 44px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rnd-card,
-  .rnd-card__more {
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
   }
 }
 
@@ -2452,13 +2412,6 @@ main > .rnd-section {
   .newsroom-all {
     min-height: 36px;
     --cta-arrow-size: 26px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .news-card,
-  .news-card *,
-  .brand-cursor__dot {
-    transition-duration: 0.01ms !important;
   }
 }
 
@@ -2930,14 +2883,6 @@ footer.site-footer {
   .site-footer__certification {
     width: 52px;
     height: 52px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .site-footer__inner {
-    will-change: auto;
-  }
-  .contact-online {
-    transition: none;
   }
 }
 
@@ -3435,11 +3380,6 @@ body.intro-ready > .top-btn {
     font-size: max(12px, 13px);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .products-section * {
-    transition-duration: 0.01ms !important;
-  }
-}
 .ir-showcase {
   position: relative;
   flex: 1 1 0;
@@ -3456,12 +3396,6 @@ body.intro-ready > .top-btn {
 @media (max-width: 760px) {
   .ir-showcase {
     margin-top: 24px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ir-showcase * {
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
   }
 }
 
@@ -3601,14 +3535,6 @@ main > .sec-8.contact-section,
   }
   .newsroom-grid {
     margin-top: 18px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-jw-reveal]:not(.is-revealed) {
-    opacity: 1;
-  }
-  .pipeline-card__arrow {
-    transition-duration: 0.01ms;
   }
 }
 
@@ -4027,15 +3953,6 @@ body {
     width: 18px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .ig-card__image {
-    will-change: auto;
-  }
-  .ig-more,
-  .ig-promote__circle {
-    transition-duration: 0.01ms;
-  }
-}
 
 /* Shared content grid: product deliberately keeps its full-width composition. */
 main
@@ -4144,11 +4061,6 @@ body.ending-active > .top-btn {
 }
 .intro-scan-ink .intro-heading__line strong {
   color: #fff;
-}
-@media (prefers-reduced-motion: reduce) {
-  .intro-scan-ink {
-    display: none;
-  }
 }
 
 /* Shared desktop rail; product keeps its wider split layout. */
@@ -4399,11 +4311,6 @@ main > #jw-newsroom {
   }
   .newsroom-grid .news-card time {
     padding-top: 10px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .products-card__photo img {
-    transition-duration: 0.01ms !important;
   }
 }
 
@@ -4892,16 +4799,6 @@ header {
     --news-corner: 40px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  #jw-drawer,
-  .drawer-backdrop,
-  main,
-  footer,
-  .top-btn .top-btn__word,
-  .top-btn .top-btn__glyph {
-    transition-duration: 0.01ms;
-  }
-}
 @media (max-width: 374px) {
   header,
   main,
@@ -5250,9 +5147,9 @@ header .menu-box .menu-item-container ul li a:hover {
 /* The rounded contact panel scrolls away to uncover the footer beneath main. */
 main {
   border-radius: 0;
-  /* End the backing at Contact so it cannot fill the rounded cutouts. */
+  /* Overlap Contact slightly so fractional painting cannot expose the black backing. */
   background: linear-gradient(#fff, #fff) top / 100%
-    calc(100% - var(--footer-contact-height, 100svh)) no-repeat;
+    calc(100% - var(--footer-contact-height, 100svh) + 2px) no-repeat;
 }
 main > #jw-contact.contact-section {
   display: block;
@@ -5267,10 +5164,6 @@ main > #jw-contact.contact-section {
     var(--section-gutter);
   overflow: hidden;
   border-radius: 0 0 var(--footer-radius, 0px) var(--footer-radius, 0px);
-  /* Clip this single screen instead of the full, scrolling page surface. */
-  clip-path: inset(
-    0 round 0 0 var(--footer-radius, 0px) var(--footer-radius, 0px)
-  );
   background: #fff;
 }
 #jw-contact > .contact-stage {
@@ -5389,12 +5282,6 @@ footer#jw-footer.site-footer {
   .site-footer .site-footer__inner {
     gap: 48px;
     padding-top: 60px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .intro-scan-background,
-  .intro-color-ink {
-    transition: none;
   }
 }
 @media (min-width: 375px) {
@@ -5587,25 +5474,6 @@ header .language-box .translate-box-1 > a:hover {
 ):hover {
   scale: 0.9090909;
 }
-@media (prefers-reduced-motion: reduce) {
-  header .hd-logo-box a,
-  header .header-icon-button,
-  header .language-box .translate-box-1 > a,
-  #jw-drawer .drawer-close,
-  #jw-drawer .drawer-globe,
-  :is(
-    .rnd-card__more,
-    .news-card__arrow,
-    .pipeline-card__arrow,
-    .ig-promote,
-    .ig-more,
-    .pipeline-all,
-    .products-control,
-    body > .top-btn
-  ) {
-    transition-duration: 0.01ms;
-  }
-}
 
 /* Revision 41: outlined CI prologue and consistent interaction timing. */
 .loading-page .loader-logo {
@@ -5679,16 +5547,6 @@ button {
   max-width: none;
   margin-inline: 0;
   border-radius: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  #jw-drawer .drawer-close,
-  #jw-rd .rnd-card .rnd-card__more,
-  #jw-research-fields .pipeline-card .pipeline-card__arrow,
-  #jw-newsroom .news-card .news-card__arrow,
-  #jw-research-fields .pipeline-all,
-  #jw-newsroom .newsroom-all {
-    transition-duration: 0.01ms;
-  }
 }
 
 /* Revision 42: readable Latin titles and full-surface card promotion. */
@@ -5914,12 +5772,6 @@ header .menu-item-container {
 }
 #jw-investment .ig-card.is-feature .ig-card__shade::after {
   opacity: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  #jw-investment .ig-card__shade::before,
-  #jw-investment .ig-card__shade::after {
-    transition-duration: 0.01ms;
-  }
 }
 
 /* Research content grows upward from a shared left and bottom rail. */
@@ -6170,10 +6022,5 @@ main > :is(#jw-rd, #jw-investment) {
     --section-heading-top: 100px;
     --section-heading-lift: -12px;
     --section-heading-gap: 18px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  footer#jw-footer.site-footer {
-    will-change: auto;
   }
 }

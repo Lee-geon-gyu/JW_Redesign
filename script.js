@@ -8,8 +8,7 @@ let pageLenis;
 // Reload immediately whenever the responsive viewport changes by at least 1px.
 // Section text and action reveal sequence ------------------------------ //
 function sectionAosSequence__init() {
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)"),
-    groups = [];
+  const groups = [];
   const definitions = [
     [
       "#jw-rd",
@@ -80,10 +79,6 @@ function sectionAosSequence__init() {
           translated = style.translate === "none" ? "0 0" : style.translate;
         old?.cancel();
         element.__jwRevealAnimation = null;
-        if (reduced.matches) {
-          element.classList.add("is-revealed");
-          return Promise.resolve();
-        }
         const direction =
           element.matches(".products-nav") &&
           group.section.classList.contains("is-stacked")
@@ -145,7 +140,6 @@ function sectionAosSequence__init() {
         );
         group.targets.add(element);
         added.push(element);
-        if (reduced.matches) element.classList.add("is-revealed");
       }),
     );
     for (const element of group.targets)
@@ -219,19 +213,6 @@ function sectionAosSequence__init() {
         observe(group);
       }),
     { passive: true },
-  );
-  reduced.addEventListener("change", () =>
-    groups.forEach((group) => {
-      group.generation++;
-      group.targets.forEach((element) => {
-        element.__jwRevealAnimation?.cancel();
-        element.__jwRevealAnimation = null;
-        element.classList.toggle(
-          "is-revealed",
-          reduced.matches || group.active,
-        );
-      });
-    }),
   );
   AOS.init({ easing: "ease-out-cubic", once: true });
 }
@@ -361,7 +342,6 @@ function loadingPage__init() {
   const header = document.querySelector("header");
   const headerSurface = headerSurface__init(header);
   const body = document.body;
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const responsiveReload =
     sessionStorage.getItem(RESPONSIVE_RELOAD_KEY) === "true";
   sessionStorage.removeItem(RESPONSIVE_RELOAD_KEY);
@@ -511,7 +491,7 @@ function loadingPage__init() {
       (scrollY - geometry.scrollStart - geometry.distance) / geometry.height,
     );
     gsap.set(stage, {
-      y: reducedMotion ? 0 : -geometry.height * 0.12 * cover,
+      y: -geometry.height * 0.12 * cover,
       filter: cover > 0 ? `blur(${(cover * 32 * 0.33).toFixed(3)}px)` : "none",
     });
     body.dataset.heroCover = cover.toFixed(4);
@@ -765,7 +745,7 @@ function loadingPage__init() {
     .then(() => document.fonts.ready)
     .then(() => {
       measure();
-      if (responsiveReload || reducedMotion) {
+      if (responsiveReload) {
         gsap.set(hero, { opacity: 1, y: 0 });
         finish();
       } else timeline.play(0);
@@ -778,7 +758,6 @@ function menuboxDropdown__init() {
   const menu = header.querySelector(".menu-box");
   const background = header.querySelector(".header-menu-background");
   const panel = menu.querySelector(".menu-item-container");
-  const reduced = matchMedia("(prefers-reduced-motion:reduce)");
   const desktop = matchMedia("(min-width:1280px)");
   const motion = { progress: 0 },
     surface = { progress: 0 };
@@ -844,12 +823,11 @@ function menuboxDropdown__init() {
     sequence?.kill();
     stagedSession = stagedSession || transparent();
     header.dataset.menuPattern = stagedSession ? "staged" : "standard";
-    const noMotion = immediate || reduced.matches;
-    const panelDuration = noMotion
+    const panelDuration = immediate
       ? 0
       : 0.32 * Math.abs((open ? 1 : 0) - motion.progress);
     const surfaceDuration =
-      noMotion || !stagedSession
+      immediate || !stagedSession
         ? 0
         : 0.15 * (open ? 1 - surface.progress : surface.progress);
     sequence = gsap.timeline({
@@ -1007,7 +985,6 @@ function navigationDrawer__init() {
     main = document.querySelector("main"),
     footer = document.querySelector("footer"),
     close = drawer.querySelector(".drawer-close");
-  const reduced = matchMedia("(prefers-reduced-motion:reduce)");
   let opened = false,
     closing = false,
     cleanupTimer = 0,
@@ -1018,10 +995,6 @@ function navigationDrawer__init() {
     panel.getAnimations().forEach((animation) => animation.cancel());
     button.setAttribute("aria-expanded", String(show));
     panel.hidden = false;
-    if (reduced.matches) {
-      panel.hidden = !show;
-      return;
-    }
     const animation = panel.animate(
       [
         { height: `${from}px`, opacity: show ? 0 : 1 },
@@ -1062,7 +1035,7 @@ function navigationDrawer__init() {
     opener.setAttribute("aria-expanded", "false");
     drawer.classList.add("close");
     document.body.classList.add("nav-closing");
-    cleanupTimer = setTimeout(finishClose, reduced.matches ? 0 : 500);
+    cleanupTimer = setTimeout(finishClose, 500);
   }
   function show() {
     if (
@@ -1484,9 +1457,7 @@ function postHeroScroll__init() {
     const position = { y: window.scrollY };
     motion = gsap.to(position, {
       y: 0,
-      duration: matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? 0
-        : 1.05,
+      duration: 1.05,
       ease: referenceEase,
       onUpdate() {
         window.scrollTo(0, position.y);
@@ -1965,7 +1936,6 @@ function investmentCarousel__init() {
   const section = grid.closest(".investment-section");
   const cards = [...grid.querySelectorAll(".ig-card")];
   const slots = [...grid.querySelectorAll(".ig-slot")];
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let order = [0, 1, 2],
     moving = false,
     visible = false,
@@ -1989,15 +1959,13 @@ function investmentCarousel__init() {
       ? "outside"
       : document.hidden
         ? "hidden"
-        : reduced.matches
-          ? "reduced-motion"
-          : pointer
-            ? "dragging"
-            : cards.some((card) => card.matches(":hover"))
-              ? "hover"
-              : keyboardMode && grid.contains(document.activeElement)
-                ? "keyboard"
-                : "";
+        : pointer
+          ? "dragging"
+          : cards.some((card) => card.matches(":hover"))
+            ? "hover"
+            : keyboardMode && grid.contains(document.activeElement)
+              ? "keyboard"
+              : "";
     grid.dataset.pauseReason = reason;
     if (reason) return;
     grid.dataset.autoplay = "true";
@@ -2078,7 +2046,7 @@ function investmentCarousel__init() {
       card.style.zIndex = id === order[0] ? "4" : id === previous ? "2" : "1";
       card.querySelector(".ig-promote").disabled = true;
     });
-    const duration = reduced.matches ? 0 : 0.95;
+    const duration = 0.95;
     const timeline = (activeTimeline = gsap.timeline({
       onComplete() {
         moving = false;
@@ -2102,10 +2070,10 @@ function investmentCarousel__init() {
     }));
     timeline.to(
       cards.map((card) => card.querySelector(".ig-card__body")),
-      { opacity: 0, duration: reduced.matches ? 0 : 0.14 },
+      { opacity: 0, duration: 0.14 },
       0,
     );
-    timeline.call(roles, [], reduced.matches ? 0 : 0.15);
+    timeline.call(roles, [], 0.15);
     order.forEach((id, slot) =>
       timeline.to(
         cards[id],
@@ -2115,8 +2083,8 @@ function investmentCarousel__init() {
     );
     timeline.to(
       cards.map((card) => card.querySelector(".ig-card__body")),
-      { opacity: 1, duration: reduced.matches ? 0 : 0.42 },
-      reduced.matches ? 0 : 0.38,
+      { opacity: 1, duration: 0.42 },
+      0.38,
     );
   }
   function promote(id, keyboard) {
@@ -2244,7 +2212,6 @@ function investmentCarousel__init() {
     card.addEventListener("pointermove", (event) => {
       if (
         !card.classList.contains("is-feature") ||
-        reduced.matches ||
         event.pointerType !== "mouse" ||
         pointer ||
         moving
@@ -2289,13 +2256,6 @@ function investmentCarousel__init() {
     if (!moving) layout();
   }).observe(grid);
   document.addEventListener("visibilitychange", schedule);
-  reduced.addEventListener("change", () => {
-    motion.forEach((point) => {
-      point.tx = point.ty = 0;
-    });
-    requestPaint();
-    schedule();
-  });
   roles();
   layout();
   grid.dataset.moving = "false";
@@ -2331,7 +2291,6 @@ function pipelineCta__init() {
     const arrow = button?.querySelector(".pipeline-all__arrow");
     const label = button?.querySelector(".pipeline-all__label");
     if (!arrow || !label) return;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     const engaged = () => button.matches(":hover, :focus-visible");
     function reset() {
@@ -2353,7 +2312,7 @@ function pipelineCta__init() {
         button.clientWidth - arrow.offsetWidth - 2 * inset,
       );
       const progress = (arrow.offsetLeft - inset) / travel;
-      if (reduced.matches || progress >= 0.33) {
+      if (progress >= 0.33) {
         button.classList.add("is-filled");
         return;
       }
@@ -2383,9 +2342,7 @@ function pipelineCounters__init() {
   if (!metrics) return;
   const numbers = [...metrics.querySelectorAll("[data-count]")];
   const targets = numbers.map((number) => Number(number.dataset.count));
-  const duration = matchMedia("(prefers-reduced-motion: reduce)").matches
-    ? 0
-    : 1400;
+  const duration = 1400;
   let frame = 0;
   let visible = false;
   function reset() {
@@ -2589,7 +2546,6 @@ function footerReveal__init() {
   const main = document.querySelector("main");
   const contact = document.querySelector("#jw-contact");
   if (!footer || !main || !contact) return;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0;
   function paint() {
     frame = 0;
@@ -2598,19 +2554,13 @@ function footerReveal__init() {
     const revealed = Math.max(0, Math.min(travel, innerHeight - mainBottom));
     const progress = travel ? revealed / travel : 0;
     const radius = Math.min(80, Math.max(28, contact.clientWidth * 0.04));
-    const rounding = reduced.matches
-      ? progress > 0
-        ? 1
-        : 0
-      : 1 - (1 - progress) ** 2;
+    const rounding = 1 - (1 - progress) ** 2;
     contact.style.setProperty(
       "--footer-radius",
       `${(radius * rounding).toFixed(3)}px`,
     );
     // Keep the footer behind the rounded main surface until it is uncovered.
-    footer.style.transform = reduced.matches
-      ? "none"
-      : `translate3d(0,${(revealed - travel).toFixed(3)}px,0)`;
+    footer.style.transform = `translate3d(0,${(revealed - travel).toFixed(3)}px,0)`;
     footer.dataset.revealProgress = progress.toFixed(4);
     // IntersectionObserver cannot see the Contact surface covering the footer.
     if (revealed <= 1) {
@@ -2636,7 +2586,6 @@ function footerReveal__init() {
   addEventListener("scroll", requestPaint, { passive: true });
   addEventListener("resize", measure, { passive: true });
   addEventListener("load", measure);
-  reduced.addEventListener("change", requestPaint);
   new ResizeObserver(requestPaint).observe(footer);
   new ResizeObserver(measure).observe(contact);
   measure();
@@ -2967,11 +2916,10 @@ function productsSection__init() {
     );
   }
   wrapper.innerHTML = markup(catalog[0]);
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const swiper = new Swiper(carousel, {
     slidesPerView: "auto",
     spaceBetween: 36,
-    speed: reduced.matches ? 0 : 600,
+    speed: 600,
     grabCursor: true,
     watchOverflow: true,
     preventClicks: true,
@@ -3019,19 +2967,18 @@ function productsSection__init() {
       .querySelectorAll(".products-panel__eyebrow,#products-category-title")
       .forEach((heading, index) => {
         heading.getAnimations().forEach((animation) => animation.cancel());
-        if (!reduced.matches)
-          heading.animate(
-            [
-              { opacity: 0, translate: "0 22px" },
-              { opacity: 1, translate: "0 0" },
-            ],
-            {
-              duration: 650,
-              delay: index * 60,
-              easing: "cubic-bezier(.22,1,.36,1)",
-              fill: "backwards",
-            },
-          );
+        heading.animate(
+          [
+            { opacity: 0, translate: "0 22px" },
+            { opacity: 1, translate: "0 0" },
+          ],
+          {
+            duration: 650,
+            delay: index * 60,
+            easing: "cubic-bezier(.22,1,.36,1)",
+            fill: "backwards",
+          },
+        );
       });
     wrapper.innerHTML = markup(category);
     swiper.update();
@@ -3397,7 +3344,6 @@ function familySite__init() {
   const list = family?.querySelector("ul");
   const footer = family?.closest("footer");
   if (!summary || !list || !footer) return;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let expanded = false,
     frame = 0,
     timer = 0;
@@ -3419,8 +3365,7 @@ function familySite__init() {
     if (next) {
       const alreadyVisible = family.open;
       family.open = true;
-      if (alreadyVisible || reduced.matches)
-        family.classList.add("is-expanded");
+      if (alreadyVisible) family.classList.add("is-expanded");
       else
         frame = requestAnimationFrame(() => {
           frame = requestAnimationFrame(() => {
@@ -3432,8 +3377,7 @@ function familySite__init() {
       if (list.contains(document.activeElement))
         summary.focus({ preventScroll: true });
     }
-    if (reduced.matches) finish();
-    else timer = setTimeout(finish, 450);
+    timer = setTimeout(finish, 450);
   }
   family.open = false;
   family.dataset.state = "closed";
